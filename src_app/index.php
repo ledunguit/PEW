@@ -8,8 +8,7 @@
 </head>
 
 <body>
-    <?php phpinfo();
-    ?>
+    <?= hello();   ?>
 </body>
 
 </html>

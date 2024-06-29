@@ -1,25 +1,17 @@
 services:
-  php-cpp:
-    container_name: ledung-oqs-php-cpp
-    build:
-      context: .
-      dockerfile: phpcpp.Dockerfile
-    volumes:
-      - ./src:/src
-    command: sleep infinity
-
   php-fpm:
     container_name: ledung-oqs-php-fpm
-    image: php:8.2-fpm
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - ./config/php-fpm/ledungoqs.com.conf:/usr/local/etc/php-fpm.d/ledungoqs.com.conf
       - ./src_app:/var/www/app
-      - ./src/ledung_oqs/build:/extensions/
+      - ./src/ledung_oqs:/src/ledung_oqs
       - ledung-oqs-socket:/var/run/php
     working_dir: /var/www/app
     networks:
       - ledung-oqs
-    command: php-fpm
 
   nginx:
     container_name: ledung-oqs-nginx

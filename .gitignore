@@ -1,2 +1,2 @@
 logs
-src/ledung_oqs/build/ledung_oqs.so
+src/ledung_oqs/*.so

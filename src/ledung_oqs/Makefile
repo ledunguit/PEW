@@ -1,15 +1,15 @@
 CPP             = g++
 RM              = rm -f
-CPP_FLAGS       = -Wall -c -I. -O2 -std=c++11
+CPP_FLAGS       = -Wall -c -I. -I/usr/include/phpcpp -O2 -std=c++11
 
 PHP_CONFIG      = $(shell which php-config)
 LIBRARY_DIR		= $(shell ${PHP_CONFIG} --extension-dir)
 PHP_CONFIG_DIR	= $(shell ${PHP_CONFIG} --ini-dir)
-PHP_FPM_CONFIG_DIR = /etc/php/8.2/fpm/conf.d
+PHP_FPM_CONFIG_DIR = /usr/local/etc/php-fpm.d
 
 LD              = g++
-LD_FLAGS        = -Wall -Wl,-rpath -shared -O2
-RESULT          = build/ledungoqs.so
+LD_FLAGS        = -Wall -Wl,-rpath,/usr/lib -shared -O2 -L/usr/lib
+RESULT          = ledungoqs.so
 
 PHPINIFILE		= 30-ledungoqs.ini
 
@@ -23,7 +23,6 @@ ${RESULT}: ${OBJECTS}
 
 clean:
 		${RM} *.obj *~* ${OBJECTS} ${RESULT}
-		${RM} -rf build/*.so
 
 ${OBJECTS}:
 		${CPP} ${CPP_FLAGS} -fpic -o $@ ${@:%.o=%.cpp}
