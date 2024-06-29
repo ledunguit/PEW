@@ -3,7 +3,9 @@ FROM php:7.4-fpm
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update
-RUN apt install git reflex procps screen -y
+RUN apt install git procps reflex -y
+
+COPY ./entrypoint.sh /helpers/entrypoint.sh
 
 # Install composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -21,4 +23,4 @@ WORKDIR /src/PHP-CPP
 RUN make -j8
 RUN make install
 
-CMD [ "php-fpm" ]
+ENTRYPOINT [ "/helpers/entrypoint.sh" ]
