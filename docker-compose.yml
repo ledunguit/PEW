@@ -1,0 +1,65 @@
+services:
+  php-cpp:
+    container_name: ledung-oqs-php-cpp
+    build:
+      context: .
+      dockerfile: phpcpp.Dockerfile
+    volumes:
+      - ./src:/src
+    command: sleep infinity
+
+  php-fpm:
+    container_name: ledung-oqs-php-fpm
+    image: php:8.2-fpm
+    volumes:
+      - ./config/php-fpm/ledungoqs.com.conf:/usr/local/etc/php-fpm.d/ledungoqs.com.conf
+      - ./src_app:/var/www/app
+      - ./src/ledung_oqs/build:/extensions/
+      - ledung-oqs-socket:/var/run/php
+    working_dir: /var/www/app
+    networks:
+      - ledung-oqs
+    command: php-fpm
+
+  nginx:
+    container_name: ledung-oqs-nginx
+    image: nginx:1.21
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/nginx/conf.d/ledungoqs.com.conf:/etc/nginx/conf.d/ledungoqs.com.conf
+      - ./config/certs/ledungoqs.com:/etc/nginx/ssl/ledungoqs.com
+      - ./src_app:/var/www/app
+      - ./logs/nginx:/var/log/nginx
+      - ledung-oqs-socket:/var/run/php
+    ports:
+      - "80:80"
+      - "443:443"
+    working_dir: /var/www/app
+    networks:
+      - ledung-oqs
+    command: nginx -g "daemon off;"
+
+  # mysql:
+  #   container_name: ledung-oqs-mysql
+  #   image: mysql:8.0
+  #   command: --default-authentication-plugin=mysql_native_password
+  #   environment:
+  #     MYSQL_DATABASE: ledung_oqs
+  #     MYSQL_USER: root
+  #     MYSQL_ROOT_PASSWORD: root
+  #   ports:
+  #     - "3306:3306"
+  #   networks:
+  #     - ledung-oqs
+  #   volumes:
+  #     - ledung-oqs-mysql:/var/lib/mysql
+
+networks:
+  ledung-oqs:
+    driver: bridge
+
+volumes:
+  ledung-oqs-mysql:
+    driver: local
+  ledung-oqs-socket:
+    driver: local
