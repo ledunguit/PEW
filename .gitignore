@@ -1,2 +1,12 @@
 logs
 src/ledung_oqs/*.so
+*/**/.DS_Store
+.vscode
+src_app/ledungoqs-stub.php
+example/*.bin
+example/*.pem
+example/**/*.pem
+example/**/*.bin
+src_extensions/ledung_oqs/*.o
+src_extensions/ledung_oqs/*.so
+src_extensions/ledung_oqs/.vscode

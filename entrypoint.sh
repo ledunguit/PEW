@@ -17,7 +17,7 @@ echo "PHP-FPM PID: ${PHP_FPM_PID}"
 
 # Create reflex config
 cat << EOF > /src/reflex/reflex.conf
--r '\.(cpp|h)$' -s -- sh -c "make -B && make install && kill -USR2 ${PHP_FPM_PID}"
+-r '\.(cpp|h)$' -s -- sh -c "make -j8 -B && make install && kill -USR2 ${PHP_FPM_PID}"
 EOF
 
 echo "Starting reflex..."
