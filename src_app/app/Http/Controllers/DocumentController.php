@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use LDSignature;
 
-class DocumentController extends Controller
+class DocumentController extends BaseController
 {
     public function index()
     {

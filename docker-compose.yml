@@ -41,13 +41,26 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: Aa@123456
       ALLOW_EMPTY_PASSWORD: "true"
-
     ports:
       - "3306:3306"
     networks:
       - ledung-oqs
     volumes:
       - ledung-oqs-mysql:/var/lib/mysql
+
+  vault:
+    container_name: ledung-oqs-vault
+    image: hashicorp/vault:latest
+    ports:
+      - 8200:8200
+    volumes:
+      - ./config/vault:/vault/config:rw
+      - ledung-oqs-vault:/vault/data:rw
+    cap_add:
+      - IPC_LOCK
+    networks:
+      - ledung-oqs
+    entrypoint: ["/vault/config/setting.sh"]
 
 networks:
   ledung-oqs:
@@ -57,4 +70,6 @@ volumes:
   ledung-oqs-mysql:
     driver: local
   ledung-oqs-socket:
+    driver: local
+  ledung-oqs-vault:
     driver: local

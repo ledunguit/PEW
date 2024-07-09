@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use LDSignature;
 
-class DashboardController extends Controller
+class DashboardController extends BaseController
 {
     public function index()
     {
