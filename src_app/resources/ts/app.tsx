@@ -5,17 +5,20 @@ import MainLayout from "./layouts/main";
 
 type Page = {
     default: {
-        layout: (page: React.ReactNode) => React.ReactNode;
+        layout?: (page: React.ReactNode) => React.ReactNode;
     };
 };
 
 createInertiaApp({
-    resolve: (name) => {
-        const pages = import.meta.glob("./pages/**/*.tsx", { eager: true });
-        let page: Page = pages[`./pages/${name}.tsx`] as Page;
+    resolve: async (name) => {
+        const pages = import.meta.glob("./pages/**/*.tsx");
+
+        const importPage = pages[`./pages/${name}.tsx`] as () => Promise<Page>;
+        let page: Page = await importPage();
 
         page.default.layout =
-            page.default.layout || ((page) => <MainLayout children={page} />);
+            page.default.layout || ((page) => <MainLayout>{page}</MainLayout>);
+
         return page;
     },
     setup({ el, App, props }) {
