@@ -9,4 +9,10 @@ export const keypairService = {
             payload
         );
     },
+    getKeyPair: (payload: { password: string }) => {
+        return axiosService.post<ResponseSuccessType>(
+            ROUTES.SETTINGS.GET_KEY_PAIR,
+            payload
+        );
+    },
 };

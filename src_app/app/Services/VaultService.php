@@ -96,9 +96,9 @@ class VaultService
     /**
      * Save a key pair for a specific user.
      */
-    public function saveKeyPairForUser(string $userId, string $publicKey, string $secretKey): array
+    public function saveKeyPair(string $keyPath, string $publicKey, string $secretKey): array
     {
-        $path = "{$this->kvPath}/data/users/{$userId}";
+        $path = "{$this->kvPath}/data/users/{$keyPath}";
         $data = [
             'data' => [
                 'public_key' => $publicKey,
@@ -106,7 +106,7 @@ class VaultService
             ]
         ];
 
-        Log::info("Saving key pair for user: {$userId}");
+        Log::info("Saving key pair for key path: {$keyPath}");
 
         return $this->request('POST', $path, ['json' => $data]);
     }
@@ -114,27 +114,27 @@ class VaultService
     /**
      * Retrieve the key pair for a specific user.
      */
-    public function retrieveKeyPairForUser(string $userId): array
+    public function retrieveKeyPair(string $keyPath): array
     {
-        $path = "{$this->kvPath}/data/users/{$userId}";
+        $path = "{$this->kvPath}/data/users/{$keyPath}";
         return $this->getSecret($path);
     }
 
     /**
      * Delete the key pair for a specific user.
      */
-    public function deleteKeyPairForUser(string $userId): array
+    public function deleteKeyPair(string $keyPath): array
     {
-        $path = "{$this->kvPath}/data/users/{$userId}";
+        $path = "{$this->kvPath}/data/users/{$keyPath}";
         return $this->request('DELETE', $path);
     }
 
     /**
      * List all key pairs under a specific user's path.
      */
-    public function listKeyPairsForUser(string $userId): array
+    public function listKeyPairs(string $keyPath): array
     {
-        $path = "{$this->kvPath}/data/user/{$userId}";
+        $path = "{$this->kvPath}/data/user/{$keyPath}";
         return $this->request('LIST', $path)['data']['keys'] ?? [];
     }
 

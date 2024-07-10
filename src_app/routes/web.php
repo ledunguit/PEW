@@ -4,7 +4,6 @@ use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\KeypairController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,5 +40,6 @@ Route::group(["middleware" => ["auth", "role:user"]], function () {
         Route::get('/', [SettingController::class, 'index'])->name('index');
 
         Route::post('/create-key-pair', [SettingController::class, 'createKeyPair'])->name('createKeyPair');
+        Route::post('/get-key-pair', [SettingController::class, 'getKeyPair'])->name('getKeyPair');
     });
 });

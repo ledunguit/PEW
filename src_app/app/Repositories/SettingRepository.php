@@ -4,10 +4,11 @@ namespace App\Repositories;
 
 use App\Interfaces\SettingRepositoryInterface;
 use App\Models\Setting;
+use App\Services\VaultService;
 
 class SettingRepository extends BaseRepository implements SettingRepositoryInterface
 {
-    public function __construct(protected Setting $setting)
+    public function __construct(protected Setting $setting, protected VaultService $vaultService)
     {
         parent::__construct($setting);
     }
@@ -24,5 +25,28 @@ class SettingRepository extends BaseRepository implements SettingRepositoryInter
         ]);
 
         return $isSet !== null;
+    }
+
+    public function getKeyPairOfUser(string $userId): array
+    {
+        if ($this->isSetKeypair($userId)) {
+            $keyPairResponse = $this->vaultService->retrieveKeyPair($this->getKeyPathOfUser($userId));
+
+            return [
+                "public_key" => $keyPairResponse['data']['public_key'],
+                "secret_key" => $keyPairResponse['data']['secret_key'],
+            ];
+        }
+
+        return [];
+    }
+
+    public function getKeyPathOfUser(string $userId): string
+    {
+        $setting = $this->findWithCondition([
+            'user_id' => $userId,
+        ]);
+
+        return $setting ? $setting->vault_key_pair_path : '';
     }
 }

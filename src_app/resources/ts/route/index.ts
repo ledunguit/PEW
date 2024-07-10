@@ -24,5 +24,6 @@ export const ROUTES = {
 
     SETTINGS: {
         CREATE_KEY_PAIR: "/settings/create-key-pair",
+        GET_KEY_PAIR: "/settings/get-key-pair",
     },
 };
