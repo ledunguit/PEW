@@ -4,16 +4,16 @@ import AdminLayout from "@/layouts/admin";
 
 const { Title, Text } = Typography;
 
-const ProjectIndexPage = () => {
+const ProfileIndexPage = () => {
     return (
         <Flex>
-            <Title level={4}>Admin Projects</Title>
+            <Title level={4}>Admin Profile</Title>
         </Flex>
     );
 };
 
-ProjectIndexPage.layout = (page: React.ReactNode) => {
+ProfileIndexPage.layout = (page: React.ReactNode) => {
     return <AdminLayout>{page}</AdminLayout>;
 };
 
-export default ProjectIndexPage;
+export default ProfileIndexPage;

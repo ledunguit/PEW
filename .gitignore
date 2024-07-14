@@ -10,3 +10,4 @@ example/**/*.bin
 src_extensions/ledung_oqs/*.o
 src_extensions/ledung_oqs/*.so
 src_extensions/ledung_oqs/.vscode
+.idea

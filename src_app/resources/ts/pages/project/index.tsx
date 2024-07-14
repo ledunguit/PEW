@@ -7,13 +7,9 @@ const { Title, Text } = Typography;
 const ProjectIndexPage = () => {
     return (
         <Flex>
-            <Title level={4}>Admin Projects</Title>
+            <Title level={4}>User Projects</Title>
         </Flex>
     );
-};
-
-ProjectIndexPage.layout = (page: React.ReactNode) => {
-    return <AdminLayout>{page}</AdminLayout>;
 };
 
 export default ProjectIndexPage;

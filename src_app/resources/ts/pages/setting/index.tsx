@@ -16,10 +16,12 @@ import {
     Select,
     SelectProps,
     Space,
+    Table,
+    TableProps,
     Typography,
 } from "antd";
 import React, { useRef, useState } from "react";
-import { FiKey, FiSettings } from "react-icons/fi";
+import { FiInfo, FiKey, FiPlus, FiSettings } from "react-icons/fi";
 
 const { Title, Text } = Typography;
 
@@ -38,11 +40,40 @@ const algorithmSelections: SelectProps["options"] = [
     },
 ];
 
+const TableColumns: TableProps["columns"] = [
+    {
+        title: "Public key",
+        dataIndex: "public_key",
+        key: "public_key",
+        render: (publicKey: string) => {
+            return <Text copyable>{publicKey}</Text>;
+        },
+    },
+    {
+        title: "Secret key",
+        dataIndex: "secret_key",
+        key: "secret_key",
+        render: (secretKey: string) => {
+            return <Text copyable>{secretKey}</Text>;
+        },
+    },
+    {
+        title: "Action",
+        dataIndex: "action",
+        key: "action",
+        render: (_, record) => {
+            return (
+                <Button onClick={() => console.log(record.keypair)}></Button>
+            );
+        },
+    },
+];
+
 const SettingPage = ({ data }: { data: SettingPageData }) => {
     const [algorithm, setAlgorithm] = useState("dilithium2");
     const [isShowModalConfirmShowKeyPair, setIsShowModalConfirmShowKeyPair] =
         useState(false);
-    const [keyPair, setKeyPair] = useState<Keypair | null>(null);
+    const [keyPairs, setKeyPairs] = useState<Keypair[]>([]);
     const { message } = App.useApp();
     const [authenticationForm] = Form.useForm<KeyPairAuthenticationFormType>();
     const passwordInputRef = useRef<InputRef>(null);
@@ -65,7 +96,7 @@ const SettingPage = ({ data }: { data: SettingPageData }) => {
             const res = await keypairService.getKeyPair({
                 password: values.password,
             });
-            setKeyPair(res.data.keypair);
+            setKeyPairs(res.data.keypair);
             setIsShowModalConfirmShowKeyPair(false);
             await message.success(res.data.message);
         } catch (err: any) {
@@ -76,8 +107,8 @@ const SettingPage = ({ data }: { data: SettingPageData }) => {
     };
 
     const handleShowKeyPair = async () => {
-        if (keyPair) {
-            setKeyPair(null);
+        if (keyPairs.length) {
+            setKeyPairs([]);
 
             await message.success("Hide key pair successfully");
         } else {
@@ -117,29 +148,39 @@ const SettingPage = ({ data }: { data: SettingPageData }) => {
                 )}
                 <Space direction="vertical">
                     <Text>
-                        You have setting the keypair. Click button below to
-                        retrieve the keypair if you want.
+                        <Space>
+                            <FiInfo />
+                            You have setting your keypair, you can manage it
+                            here.
+                        </Space>
                     </Text>
-                    <Button onClick={handleShowKeyPair}>
-                        <FiKey /> {keyPair ? "Hide key pair" : "Show key pair"}
-                    </Button>
+                    <Space>
+                        <Button onClick={handleShowKeyPair}>
+                            <Space>
+                                <FiKey />
+                                {keyPairs.length ? (
+                                    <Text>Hide key pair</Text>
+                                ) : (
+                                    <Text>Show key pair</Text>
+                                )}
+                            </Space>
+                        </Button>
+
+                        <Button onClick={handleCreateNewKeyPair}>
+                            <FiPlus /> Gen new keypair
+                        </Button>
+                    </Space>
                 </Space>
 
-                {keyPair && (
-                    <Space direction="vertical" className="mt-4">
-                        <Form layout="vertical">
-                            <Form.Item label="Public key">
-                                <Input.Password
-                                    value={keyPair?.public_key}
-                                ></Input.Password>
-                            </Form.Item>
-                            <Form.Item label="Secret key">
-                                <Input.Password
-                                    value={keyPair?.secret_key}
-                                ></Input.Password>
-                            </Form.Item>
-                        </Form>
-                    </Space>
+                {!keyPairs && (
+                    <Table
+                        className="mt-4"
+                        locale={{
+                            emptyText: "No key pairs was set",
+                        }}
+                        columns={TableColumns}
+                        dataSource={keyPairs}
+                    ></Table>
                 )}
             </Flex>
 

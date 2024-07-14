@@ -19,7 +19,7 @@ import { AuthData } from "@/types";
 const { Header } = Layout;
 const { Text, Title } = Typography;
 
-const Headerbar = ({ auth }: { auth: AuthData }) => {
+const Headerbar = ({ auth, isAdmin }: { auth: AuthData; isAdmin: boolean }) => {
     const { message } = App.useApp();
     const handleLogout = () => {
         router.visit(ROUTES.LOGOUT, {
@@ -35,11 +35,7 @@ const Headerbar = ({ auth }: { auth: AuthData }) => {
             key: "account",
             label: (
                 <Link
-                    href={
-                        auth.user.role === "admin"
-                            ? ROUTES.ADMIN.ACCOUNT
-                            : ROUTES.USER.ACCOUNT
-                    }
+                    href={isAdmin ? ROUTES.ADMIN.PROFILE : ROUTES.USER.PROFILE}
                     className="flex gap-2 items-center"
                 >
                     <FiUser />
@@ -92,7 +88,7 @@ const Headerbar = ({ auth }: { auth: AuthData }) => {
                         align="center"
                         gap={10}
                     >
-                        <Text>Welcome {auth.user.name}</Text>
+                        <Text>{auth.user.name}</Text>
                         <Avatar size={30} icon={<LuUserCircle />} />
                     </Flex>
                 </Dropdown>

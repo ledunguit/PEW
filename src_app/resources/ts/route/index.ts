@@ -11,15 +11,25 @@ export const ROUTES = {
             INDEX: "/settings",
             CREATE_KEY_PAIR: "/settings/create-key-pair",
         },
-        ACCOUNT: "/account",
+        PROFILE: "/profile",
     },
     ADMIN: {
-        DOCUMENTS: "/admin/documents",
+        DASHBOARD: "/admin/dashboard",
         PROJECTS: "/admin/projects",
+        USERS: {
+            INDEX: "/admin/users",
+            CREATE: "/admin/users/create",
+            EDIT: "/admin/users/edit",
+            DELETE: "/admin/users/delete",
+            UPDATE: "/admin/users/update",
+            UPDATE_PASSWORD: "/admin/users/update-password",
+            UPDATE_ROLE: "/admin/users/update-role",
+            UPDATE_STATUS: "/admin/users/update-status",
+        },
         SETTINGS: {
             INDEX: "/admin/settings",
         },
-        ACCOUNT: "/admin/account",
+        PROFILE: "/admin/profile",
     },
 
     SETTINGS: {

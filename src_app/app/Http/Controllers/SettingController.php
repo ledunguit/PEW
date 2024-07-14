@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\User\Setting\CreateKeyPairRequest;
 use App\Http\Requests\User\Setting\GetKeyPairRequest;
 use App\Interfaces\SettingRepositoryInterface;
-use App\Models\Keypair;
 use App\Services\VaultService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,28 +31,39 @@ class SettingController extends BaseController
 
     public function createKeyPair(CreateKeyPairRequest $request)
     {
-        $keyPath = $this->settingRepository->getKeyPathOfUser($request->user()->id);
-
-        if ($keyPath) {
-            return $this->error([
-                "message" => "Key pair already exists",
-            ]);
-        }
-
         $algorithm = $request->input('algorithm');
-
         $sig = new LDSignature($algorithm);
 
-        $keypair = $sig->generate_key_pair();
+        $keyPath = $this->settingRepository->getKeyPathOfUser($request->user()->id);
 
-        $uuid = Str::uuid()->toString();
+        if ($keyPath) { // User already have a key pair
+            $totalVersions = $this->vaultService->totalVersions($keyPath);
 
-        $this->settingRepository->create([
-            'user_id' => $request->user()->id,
-            'vault_key_pair_path' => $uuid,
-        ]);
+            switch ($totalVersions) {
+                case MAXIMUM_NUMBER_OF_KEY_PAIRS:
+                    return $this->error([
+                        "message" => "You have reach the maximum number of key pair versions",
+                    ]);
+                default:
+                    $keypair = $sig->generate_key_pair();
 
-        $this->vaultService->saveKeyPair($uuid, $keypair[0], $keypair[1]);
+                    $this->vaultService->saveKeyPair($keyPath, $keypair[0], $keypair[1]);
+
+                    return $this->success([
+                        "message" => "Dilithium key pair created successfully",
+                    ]);
+            }
+        } else { // Create new key pair with new key pair path
+            $uuid = Str::uuid()->toString();
+            $keypair = $sig->generate_key_pair();
+
+            $this->settingRepository->create([
+                'user_id' => $request->user()->id,
+                'vault_key_pair_path' => $uuid,
+            ]);
+
+            $this->vaultService->saveKeyPair($uuid, $keypair[0], $keypair[1]);
+        }
 
         return $this->success([
             'message' => "Dilithium key pair created successfully",

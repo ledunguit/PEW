@@ -58,7 +58,7 @@ class VaultService
     /**
      * Retrieve a secret from the given path.
      */
-    private function getSecret(string $path): array
+    private function sendRequest(string $path): array
     {
         return $this->request('GET', $path)['data'] ?? [];
     }
@@ -96,9 +96,9 @@ class VaultService
     /**
      * Save a key pair for a specific user.
      */
-    public function saveKeyPair(string $keyPath, string $publicKey, string $secretKey): array
+    public function saveKeyPair(string $userKeyPath, string $publicKey, string $secretKey): array
     {
-        $path = "{$this->kvPath}/data/users/{$keyPath}";
+        $path = "{$this->kvPath}/data/users/{$userKeyPath}";
         $data = [
             'data' => [
                 'public_key' => $publicKey,
@@ -106,7 +106,7 @@ class VaultService
             ]
         ];
 
-        Log::info("Saving key pair for key path: {$keyPath}");
+        Log::info("Saving key pair for key path: $userKeyPath");
 
         return $this->request('POST', $path, ['json' => $data]);
     }
@@ -114,28 +114,53 @@ class VaultService
     /**
      * Retrieve the key pair for a specific user.
      */
-    public function retrieveKeyPair(string $keyPath): array
+    public function retrieveKeyPair(string $userKeyPath): array
     {
-        $path = "{$this->kvPath}/data/users/{$keyPath}";
-        return $this->getSecret($path);
+        $path = "{$this->kvPath}/data/users/{$userKeyPath}";
+
+        return $this->sendRequest($path);
+    }
+
+    public function getMetadata(string $userKeyPath): array
+    {
+        $path = "{$this->kvPath}/metadata/users/{$userKeyPath}";
+
+        return $this->sendRequest($path);
+    }
+
+    public function getAllKeyPairs(string $userKeyPath): array
+    {
+        $path = "{$this->kvPath}/data/users/{$userKeyPath}";
+
+        return [];
     }
 
     /**
      * Delete the key pair for a specific user.
      */
-    public function deleteKeyPair(string $keyPath): array
+    public function deleteKeyPair(string $userKeyPath): array
     {
-        $path = "{$this->kvPath}/data/users/{$keyPath}";
+        $path = "{$this->kvPath}/data/users/{$userKeyPath}";
         return $this->request('DELETE', $path);
     }
 
     /**
      * List all key pairs under a specific user's path.
      */
-    public function listKeyPairs(string $keyPath): array
+    public function listKeyPairs(string $userKeyPath): array
     {
-        $path = "{$this->kvPath}/data/user/{$keyPath}";
+        $path = "{$this->kvPath}/data/user/{$userKeyPath}";
+
         return $this->request('LIST', $path)['data']['keys'] ?? [];
+    }
+
+    public function totalVersions(string $userKeyPath): int
+    {
+        $path = "{$this->kvPath}/metadata/users/{$userKeyPath}";
+
+        $versions = $this->request("GET", $path)["data"]["versions"];
+
+        return count($versions);
     }
 
     /**

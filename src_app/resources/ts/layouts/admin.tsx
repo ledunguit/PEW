@@ -9,7 +9,7 @@ import { SharedData } from "@/types";
 
 const { Content } = Layout;
 
-const MainLayout = ({ children }: { children: React.ReactNode }) => {
+const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     const { route, auth } = usePage<SharedData>().props;
     const [collapsed, setCollapsed] = useState<boolean>(false);
 
@@ -20,10 +20,12 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
             }}
         >
             <Head>
-                <title>LeDungOQS - Internal file sharing</title>
+                <title>
+                    LeDungOQS - Internal file sharing | Admin Dashboard
+                </title>
             </Head>
             <Layout style={{ minHeight: "100vh" }}>
-                <Headerbar auth={auth} />
+                <Headerbar auth={auth} isAdmin={auth.user.role === "admin"} />
 
                 <Layout>
                     <Sidebar
@@ -52,4 +54,4 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     );
 };
 
-export default MainLayout;
+export default AdminLayout;

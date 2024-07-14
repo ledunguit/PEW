@@ -8,7 +8,7 @@ const DashboardIndexPage = () => {
 
     return (
         <div>
-            <Title level={4}>Dashboard</Title>
+            <Title level={4}>User Dashboard</Title>
             <Button
                 type="primary"
                 onClick={() => message.success("Click from dashboard")}

@@ -11,6 +11,15 @@ class AuthController extends BaseController
 {
     public function loginView()
     {
+        if (Auth::check()) {
+            switch (Auth::user()->role) {
+                case 'admin':
+                    return redirect()->route('admin.dashboard.index');
+                default:
+                    return redirect()->route('dashboard.index');
+            }
+        }
+
         return Inertia::render("auth/login");
     }
 
@@ -25,7 +34,14 @@ class AuthController extends BaseController
         $remember = $loginRequest->only(['remember']) && $loginRequest->remember ?? false;
 
         if (Auth::attempt($credentials, $remember)) {
-            return redirect()->route('dashboard.index');
+            $user = Auth::user();
+
+            switch ($user->role) {
+                case 'admin':
+                    return redirect()->route('admin.dashboard.index');
+                default:
+                    return redirect()->route('dashboard.index');
+            }
         }
 
         return Inertia::render("auth/login", [
