@@ -2,6 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { createInertiaApp } from "@inertiajs/react";
 import MainLayout from "./layouts/main";
+import { App as AntdApp } from "antd";
 
 type Page = {
     default: {
@@ -22,6 +23,14 @@ createInertiaApp({
         return page;
     },
     setup({ el, App, props }) {
-        createRoot(el).render(<App {...props} />);
+        createRoot(el).render(
+            <AntdApp
+                message={{
+                    maxCount: 2,
+                }}
+            >
+                <App {...props} />
+            </AntdApp>
+        );
     },
 });

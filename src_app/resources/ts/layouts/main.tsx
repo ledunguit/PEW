@@ -14,16 +14,12 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     const [collapsed, setCollapsed] = useState<boolean>(false);
 
     return (
-        <App
-            message={{
-                maxCount: 1,
-            }}
-        >
+        <>
             <Head>
                 <title>LeDungOQS - Internal file sharing</title>
             </Head>
             <Layout style={{ minHeight: "100vh" }}>
-                <Headerbar auth={auth} />
+                <Headerbar auth={auth} isAdmin={auth.user.role === "admin"} />
 
                 <Layout>
                     <Sidebar
@@ -48,7 +44,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
                     </Layout>
                 </Layout>
             </Layout>
-        </App>
+        </>
     );
 };
 

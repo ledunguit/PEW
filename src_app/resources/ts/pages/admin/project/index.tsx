@@ -1,14 +1,136 @@
-import React from "react";
-import { Typography, Flex } from "antd";
+import React, { useState } from "react";
+import {
+    Flex,
+    Divider,
+    TableProps,
+    Table,
+    Space,
+    Button,
+    Form,
+    App,
+} from "antd";
 import AdminLayout from "@/layouts/admin";
+import { CreateProjectForm, Project } from "@/types";
+import { LuDelete, LuPlus, LuUser2 } from "react-icons/lu";
+import { PiFileCsv } from "react-icons/pi";
+import CreateProjectModal from "./components/create-project-modal";
 
-const { Title, Text } = Typography;
+const ProjectIndexPage = ({ projects }: { projects: Project[] }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [form] = Form.useForm<CreateProjectForm>();
+    const { message } = App.useApp();
 
-const ProjectIndexPage = () => {
+    const handleDeleteProject = async (id: number) => {
+        await message.success(`Project ${id} deleted successfully`);
+    };
+
+    const TableColumns: TableProps["columns"] = [
+        {
+            key: "name",
+            title: "Name",
+            dataIndex: "name",
+        },
+        {
+            key: "project_id",
+            title: "Project ID",
+            dataIndex: "project_id",
+        },
+        {
+            key: "description",
+            title: "Description",
+            dataIndex: "description",
+        },
+        {
+            key: "company_name",
+            title: "Company",
+            dataIndex: "company_name",
+        },
+        {
+            key: "number_of_employees",
+            title: "Employees",
+            dataIndex: "number_of_employees",
+        },
+        {
+            key: "start_date",
+            title: "Start Date",
+            dataIndex: "start_date",
+        },
+        {
+            key: "end_date",
+            title: "End Date",
+            dataIndex: "end_date",
+        },
+        {
+            key: "action",
+            title: "Action",
+            fixed: "right",
+            dataIndex: "action",
+            render: (_: any, record: Project) => (
+                <Space>
+                    <Button
+                        type="dashed"
+                        onClick={() => {
+                            console.log(record);
+                        }}
+                        icon={<LuUser2 />}
+                    >
+                        Users
+                    </Button>
+                    <Button
+                        type="primary"
+                        danger
+                        onClick={() => handleDeleteProject(record.id)}
+                    >
+                        <LuDelete />
+                    </Button>
+                </Space>
+            ),
+        },
+    ];
+
     return (
-        <Flex>
-            <Title level={4}>Admin Projects</Title>
-        </Flex>
+        <>
+            <Flex vertical>
+                <Divider
+                    className="select-none !m-0 !mb-4"
+                    type="horizontal"
+                    orientation="left"
+                    orientationMargin={0}
+                >
+                    Projects Management
+                </Divider>
+
+                <Space className="mb-2">
+                    <Button
+                        type="primary"
+                        icon={<LuPlus />}
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        Create
+                    </Button>
+
+                    <Button icon={<PiFileCsv />}>Export CSV</Button>
+                </Space>
+
+                <Table
+                    rowKey={"project_id"}
+                    locale={{ emptyText: "No projects found" }}
+                    columns={TableColumns}
+                    dataSource={projects}
+                    scroll={{
+                        x: "max-content",
+                    }}
+                />
+            </Flex>
+
+            <CreateProjectModal
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+                isLoading={isLoading}
+                form={form}
+            />
+        </>
     );
 };
 

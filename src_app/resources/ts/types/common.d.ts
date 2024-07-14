@@ -1,6 +1,6 @@
 export type ResponseSuccessType = {
     success: true;
-    data: {
+    data?: {
         [key: string]: any;
     };
 };

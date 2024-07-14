@@ -21,7 +21,7 @@ export const ADMIN_MENU_ITEMS: MenuProps["items"] = [
         icon: <LuFolderHeart />,
         label: "Projects",
         onClick: () => {
-            window.location.href = ROUTES.ADMIN.PROJECTS;
+            window.location.href = ROUTES.ADMIN.PROJECTS.INDEX;
         },
     },
     {

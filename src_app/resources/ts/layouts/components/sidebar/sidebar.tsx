@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Layout, Menu } from "antd";
 import { AuthData } from "@/types";
 import { ADMIN_MENU_ITEMS } from "./admin-routes";
@@ -17,9 +17,6 @@ const Sidebar = ({
     collapsed: boolean;
     setCollapsed: (collapsed: boolean) => void;
 }) => {
-    useEffect(() => {
-        console.log(route);
-    });
     return (
         <Sider
             onCollapse={() => setCollapsed(!collapsed)}

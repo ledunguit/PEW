@@ -16,7 +16,13 @@ export const ROUTES = {
     },
     ADMIN: {
         DASHBOARD: "/admin/dashboard",
-        PROJECTS: "/admin/projects",
+        PROJECTS: {
+            INDEX: "/admin/projects",
+            CREATE: "/admin/projects/create",
+            EDIT: "/admin/projects/edit",
+            DELETE: "/admin/projects/delete",
+            UPDATE: "/admin/projects/update",
+        },
         USERS: {
             INDEX: "/admin/users",
             CREATE: "/admin/users/create",

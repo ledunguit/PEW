@@ -4,18 +4,14 @@ import React from "react";
 
 const LandingLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <App
-            message={{
-                maxCount: 1,
-            }}
-        >
+        <>
             <Head>
                 <title>LeDungOQS - Internal file sharing | Login</title>
             </Head>
             <Flex align="center" justify="center" className="w-full h-screen">
                 {children}
             </Flex>
-        </App>
+        </>
     );
 };
 

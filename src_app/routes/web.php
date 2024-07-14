@@ -40,6 +40,7 @@ Route::name('admin.')->middleware(["auth", "role:admin"])->prefix('/admin')->gro
 
     Route::name('project.')->prefix('/projects')->group(function () {
         Route::get('/', [AdminProjectController::class, 'index'])->name('index');
+        Route::post('/create', [AdminProjectController::class, 'create'])->name('create');
     });
 
     Route::name('profile.')->prefix('/profile')->group(function () {

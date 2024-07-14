@@ -14,11 +14,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     const [collapsed, setCollapsed] = useState<boolean>(false);
 
     return (
-        <App
-            message={{
-                maxCount: 1,
-            }}
-        >
+        <>
             <Head>
                 <title>
                     LeDungOQS - Internal file sharing | Admin Dashboard
@@ -50,7 +46,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                     </Layout>
                 </Layout>
             </Layout>
-        </App>
+        </>
     );
 };
 
