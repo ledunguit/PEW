@@ -9,11 +9,11 @@ import { MdInfoOutline } from "react-icons/md";
 
 export const USER_MENU_ITEMS: MenuProps["items"] = [
     {
-        key: "/",
+        key: "dashboard",
         icon: <RxDashboard />,
         label: "Dashboard",
         onClick: () => {
-            window.location.href = ROUTES.DASHBOARD;
+            window.location.href = ROUTES.USER.DASHBOARD;
         },
     },
     {

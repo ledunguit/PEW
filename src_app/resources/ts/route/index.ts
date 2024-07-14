@@ -1,10 +1,11 @@
 export const ROUTES = {
-    DASHBOARD: "/",
+    HOME: "/",
     LOGIN: "/auth/login",
     REGISTER: "/auth/register",
     LOGOUT: "/auth/logout",
     INFO: "/info",
     USER: {
+        DASHBOARD: "/dashboard",
         DOCUMENTS: "/documents",
         PROJECTS: "/projects",
         SETTINGS: {

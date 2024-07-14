@@ -59,6 +59,6 @@ class AuthController extends BaseController
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('web.auth.login');
+        return redirect()->route('home');
     }
 }
