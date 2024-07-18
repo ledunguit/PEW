@@ -20,8 +20,16 @@ export const ROUTES = {
             INDEX: "/admin/projects",
             CREATE: "/admin/projects/create",
             EDIT: "/admin/projects/edit",
-            DELETE: "/admin/projects/delete",
+            DELETE: (id: number) => `/admin/projects/delete/${id}`,
             UPDATE: "/admin/projects/update",
+            ASSIGN_USERS: "/admin/projects/assign-users",
+        },
+        DOCUMENTS: {
+            INDEX: "/admin/documents",
+            CREATE: "/admin/documents/create",
+            EDIT: "/admin/documents/edit",
+            DELETE: (id: number) => `/admin/documents/delete/${id}`,
+            UPDATE: "/admin/documents/update",
         },
         USERS: {
             INDEX: "/admin/users",
@@ -32,6 +40,7 @@ export const ROUTES = {
             UPDATE_PASSWORD: "/admin/users/update-password",
             UPDATE_ROLE: "/admin/users/update-role",
             UPDATE_STATUS: "/admin/users/update-status",
+            GET_USERS_LIKE_BY_NAME: `/admin/users/get-users-like-by-name`,
         },
         SETTINGS: {
             INDEX: "/admin/settings",

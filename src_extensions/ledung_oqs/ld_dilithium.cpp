@@ -1,17 +1,17 @@
-#include "signature.h"
+#include "ld_dilithium.h"
 
 #include "helpers.h"
 
-LDSignature::LDSignature() {}
+LDDilithium::LDDilithium() {}
 
-LDSignature::~LDSignature()
+LDDilithium::~LDDilithium()
 {
     OQS_SIG_free(_sig);
     _public_key.clear();
     _secret_key.clear();
 }
 
-void LDSignature::_write_pem_file(const string &filename, const vector<uint8_t> &data, bool is_public_key)
+void LDDilithium::_write_pem_file(const string &filename, const vector<uint8_t> &data, bool is_public_key)
 {
     try
     {
@@ -49,7 +49,7 @@ void LDSignature::_write_pem_file(const string &filename, const vector<uint8_t> 
     }
 }
 
-void LDSignature::_read_pem_file(const string &filename, const bool is_public_key)
+void LDDilithium::_read_pem_file(const string &filename, const bool is_public_key)
 {
     ifstream file(filename);
 
@@ -93,7 +93,7 @@ void LDSignature::_read_pem_file(const string &filename, const bool is_public_ke
     }
 }
 
-void LDSignature::__construct(Php::Parameters &params)
+void LDDilithium::__construct(Php::Parameters &params)
 {
     const auto algorithm_name = empty(params) ? "dilithium2" : params[0].stringValue();
 
@@ -110,7 +110,7 @@ void LDSignature::__construct(Php::Parameters &params)
     }
 }
 
-Php::Value LDSignature::generate_key_pair(Php::Parameters &params)
+Php::Value LDDilithium::generate_key_pair(Php::Parameters &params)
 {
     if (empty(params))
     {
@@ -168,7 +168,7 @@ Php::Value LDSignature::generate_key_pair(Php::Parameters &params)
     return Php::Value();
 }
 
-Php::Value LDSignature::sign(Php::Parameters &params)
+Php::Value LDDilithium::sign(Php::Parameters &params)
 {
     if (!_secret_key.size())
     {
@@ -207,7 +207,7 @@ Php::Value LDSignature::sign(Php::Parameters &params)
     return true;
 }
 
-Php::Value LDSignature::verify(Php::Parameters &params)
+Php::Value LDDilithium::verify(Php::Parameters &params)
 {
     if (!_public_key.size())
     {
@@ -237,7 +237,7 @@ Php::Value LDSignature::verify(Php::Parameters &params)
     return true;
 }
 
-Php::Value LDSignature::load_key_pair(Php::Parameters &params)
+Php::Value LDDilithium::load_key_pair(Php::Parameters &params)
 {
     if (params.size() != 3)
     {
@@ -283,7 +283,7 @@ Php::Value LDSignature::load_key_pair(Php::Parameters &params)
     }
 }
 
-Php::Value LDSignature::load_public_key_from_string(Php::Parameters &params)
+Php::Value LDDilithium::load_public_key_from_string(Php::Parameters &params)
 {
     if (params.size() != 1)
     {
@@ -297,7 +297,7 @@ Php::Value LDSignature::load_public_key_from_string(Php::Parameters &params)
     return true;
 }
 
-Php::Value LDSignature::load_secret_key_from_string(Php::Parameters &params)
+Php::Value LDDilithium::load_secret_key_from_string(Php::Parameters &params)
 {
     if (params.size() != 1)
     {
@@ -311,7 +311,7 @@ Php::Value LDSignature::load_secret_key_from_string(Php::Parameters &params)
     return true;
 }
 
-Php::Value LDSignature::load_public_key_from_file(Php::Parameters &params)
+Php::Value LDDilithium::load_public_key_from_file(Php::Parameters &params)
 {
     if (params.size() != 2)
     {
@@ -351,7 +351,7 @@ Php::Value LDSignature::load_public_key_from_file(Php::Parameters &params)
     return true;
 }
 
-Php::Value LDSignature::load_secret_key_from_file(Php::Parameters &params)
+Php::Value LDDilithium::load_secret_key_from_file(Php::Parameters &params)
 {
     if (params.size() != 2)
     {

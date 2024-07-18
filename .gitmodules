@@ -1,3 +1,6 @@
 [submodule "src_extensions/liboqs"]
 	path = src_extensions/liboqs
 	url = https://github.com/open-quantum-safe/liboqs.git
+[submodule "src_extensions/openssl"]
+	path = src_extensions/openssl
+	url = https://github.com/openssl/openssl.git

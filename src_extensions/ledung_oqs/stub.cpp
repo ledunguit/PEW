@@ -151,8 +151,8 @@ void generateStubFile(const char *filename)
 
 void generateStub(const char *filename)
 {
-    const vector<MethodInfo> methods = {
-        {"__construct", {{"string", "algorithm", true, "dilithium2"}}, "void"},
+    const vector<MethodInfo> ld_dilithium_methods = {
+        {"__construct", {{"string", "algorithm", true, "dilithium2"}}, ""},
         {"generate_key_pair",
          {{"string", "public_file_path", true, ""}, {"string", "secret_file_path", true, ""}, {"string", "format", true, "PEM|DER"}},
          "array|bool"},
@@ -165,6 +165,17 @@ void generateStub(const char *filename)
         {"load_secret_key_from_file", {{"string", "secret_key_file"}, {"string", "format"}}, "bool"},
     };
 
-    registerClass("LDSignature", methods);
+    const vector<MethodInfo> ld_signature_methods = {
+        {"__construct", {{"string", "algorithm", true, "ecdsa|rsa"}, {"int", "keySize", true, "256"}}, ""},
+        {"generate_key_pair", {}, ""},
+        {"load_key_pair", {{"string", "public_key_filename"}, {"string", "secret_key_filename"}, {"string", "format"}}, "bool"},
+        {"sign", {{"string", "filename"}, {"string", "signature_filename"}}, "bool"},
+        {"verify", {{"string", "filename"}, {"string", "signature_filename"}}, "bool"},
+        {"load_public_key_from_string", {{"string", "b64_key"}}, "bool"},
+        {"load_public_key_from_file", {{"string", "public_key_file"}, {"string", "format"}}, "bool"},
+    };
+
+    registerClass("LDDilithium", ld_dilithium_methods);
+    registerClass("LDSignature", ld_signature_methods);
     generateStubFile(filename);
 }

@@ -17,7 +17,9 @@
     },
     "dependencies": {
         "@inertiajs/react": "^1.2.0",
+        "@types/lodash": "^4.17.6",
         "antd": "^5.19.1",
+        "lodash": "^4.17.21",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-icons": "^5.2.1",

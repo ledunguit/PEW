@@ -14,10 +14,19 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
     public function checkExistProjectId($projectId)
     {
-        $project = $this->findWithCondition([
+        $project = $this->findFirstWithCondition([
             "project_id" => $projectId
         ]);
 
         return $project ? true : false;
+    }
+
+    public function assignUsers($projectId, $userIds)
+    {
+        $project = $this->findFirstWithCondition([
+            "project_id" => $projectId
+        ]);
+
+        return $project->users()->attach($userIds);
     }
 }

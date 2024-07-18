@@ -27,4 +27,20 @@ export const projectService = {
             payload
         );
     },
+    delete: (id: number) => {
+        return axiosService.delete<ResponseSuccessType>(
+            ROUTES.ADMIN.PROJECTS.DELETE(id)
+        );
+    },
+    assignUsers: (projectId: string, userIds: string[]) => {
+        const payload = {
+            project_id: projectId,
+            user_ids: userIds,
+        };
+
+        return axiosService.post<ResponseSuccessType>(
+            ROUTES.ADMIN.PROJECTS.ASSIGN_USERS,
+            payload
+        );
+    },
 };

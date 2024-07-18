@@ -6,7 +6,7 @@ class LDSignature {
      * @param string $algorithm [optional]
      * @return void
      */
-    public function __construct($algorithm = "dilithium2"): void {}
+    public function __construct($algorithm = "dilithium2") {}
 
     /**
      * generate_key_pair method.

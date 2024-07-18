@@ -1,9 +1,11 @@
-#ifndef LEDUNGOQS_SIGNATURE_H
-#define LEDUNGOQS_SIGNATURE_H
+#ifndef LEDUNGOQS_LD_SIGNATURE_H
+#define LEDUNGOQS_LD_SIGNATURE_H
 
 #include <openssl/bio.h>
 #include <openssl/buffer.h>
+#include <openssl/ec.h>
 #include <openssl/evp.h>
+#include <openssl/pem.h>
 #include <oqs/oqs.h>
 #include <phpcpp.h>
 
@@ -32,16 +34,11 @@ class LDSignature : public Php::Base
     Php::Value load_secret_key_from_file(Php::Parameters &params);
 
    private:
-    OQS_SIG *_sig;
-    string public_header = "-----BEGIN PUBLIC KEY-----";
-    string secret_header = "-----BEGIN SECRET KEY-----";
-    string public_footer = "-----END PUBLIC KEY-----";
-    string secret_footer = "-----END SECRET KEY-----";
-    vector<uint8_t> _public_key;
-    vector<uint8_t> _secret_key;
-
-    void _write_pem_file(const string &filename, const vector<uint8_t> &data, bool is_public_key);
-    void _read_pem_file(const string &filename, const bool is_public_key);
+    string _algorithm;
+    const char *_private_key;
+    const char *_public_key;
+    int _key_size;
+    EVP_PKEY_CTX *_pctx;
 };
 
 #endif
