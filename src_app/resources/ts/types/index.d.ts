@@ -5,6 +5,7 @@ export * from "./auth";
 
 // Pages
 export * from "./pages/setting";
+export * from "./pages/project";
 
-// AdminLayout
+// Admin
 export * from "./pages/admin/project";

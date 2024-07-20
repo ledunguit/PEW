@@ -21,7 +21,7 @@ export const USER_MENU_ITEMS: MenuProps["items"] = [
         icon: <LuFolderHeart />,
         label: "Projects",
         onClick: () => {
-            window.location.href = ROUTES.USER.PROJECTS;
+            window.location.href = ROUTES.USER.PROJECTS.INDEX;
         },
     },
     {

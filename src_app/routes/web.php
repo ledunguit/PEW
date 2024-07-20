@@ -69,6 +69,8 @@ Route::group(["middleware" => ["auth", "role:user"]], function () {
 
     Route::name('project.')->prefix('/projects')->group(function () {
         Route::get('/', [ProjectController::class, 'index'])->name('index');
+        Route::get('/detail/{project_id}', [ProjectController::class, 'detail'])->name('detail');
+        Route::post('/upload-document', [ProjectController::class, 'uploadDocument'])->name('uploadDocument');
     });
 
     Route::name("document.")->prefix('/documents')->group(function () {

@@ -31,7 +31,7 @@ const LoginPage = () => {
                 setErrors(errors);
             },
             replace: true, // Replace the current page in the history stack
-            preserveState: false,
+            preserveState: true,
         });
     };
 

@@ -12,7 +12,7 @@ class VaultService
     private string $baseUri;
     private string $roleId;
     private string $secretId;
-    private ?string $token = null;
+    private ?string $token;
     private string $kvPath;
 
     private int $trial = 1;

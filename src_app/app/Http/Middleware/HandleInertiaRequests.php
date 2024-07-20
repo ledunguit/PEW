@@ -39,6 +39,7 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'route' => Route::current()->uri ?? Route::getCurrentRoute()->getPrefix(),
             'auth.user' => fn () => $request->user() ? $request->user()->only('id', 'name', 'email', 'role') : null,
+            'csrf_token' => csrf_token(),
         ]);
     }
 }

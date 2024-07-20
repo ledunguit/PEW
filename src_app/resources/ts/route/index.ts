@@ -7,7 +7,11 @@ export const ROUTES = {
     USER: {
         DASHBOARD: "/dashboard",
         DOCUMENTS: "/documents",
-        PROJECTS: "/projects",
+        PROJECTS: {
+            INDEX: "/projects",
+            DETAIL: (projectId: string) => `/projects/detail/${projectId}`,
+            UPLOAD_DOCUMENT: "/projects/upload-document",
+        },
         SETTINGS: {
             INDEX: "/settings",
             CREATE_KEY_PAIR: "/settings/create-key-pair",

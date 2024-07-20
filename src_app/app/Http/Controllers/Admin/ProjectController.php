@@ -6,8 +6,8 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\Admin\Project\AssignUsersRequest;
 use App\Http\Requests\Admin\Project\CreateProjectRequest;
 use App\Interfaces\ProjectRepositoryInterface;
-use Inertia\Inertia;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class ProjectController extends BaseController
 {

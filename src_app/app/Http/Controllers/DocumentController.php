@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use LDSignature;
+use LDDilithium;
 
 class DocumentController extends BaseController
 {
     public function index()
     {
-        $sig = new LDSignature();
+        $sig = new LDDilithium();
         $keyPair = $sig->generate_key_pair();
 
         return Inertia::render('document/index', [
