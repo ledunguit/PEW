@@ -64,4 +64,11 @@ RUN cmake -GNinja ..
 RUN ninja
 RUN ninja install
 
+WORKDIR /src
+
+COPY ./src_extensions/openssl /src/openssl
+# Install OpenSSL
+WORKDIR /src/openssl
+RUN ./config no-shared no-docs --prefix=/usr/local && make -j8 && make install
+
 ENTRYPOINT [ "/helpers/entrypoint.sh" ]

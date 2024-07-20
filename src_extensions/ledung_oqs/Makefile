@@ -19,7 +19,7 @@ OBJECTS         = $(SOURCES:%.cpp=%.o)
 all:	${OBJECTS} ${RESULT}
 
 ${RESULT}: ${OBJECTS}
-		${LD} ${LD_FLAGS} -o $@ ${OBJECTS} -lphpcpp -loqs
+		${LD} ${LD_FLAGS} -o $@ ${OBJECTS} -lphpcpp -loqs -lcrypto -lssl
 
 clean:
 		${RM} *.obj *~* ${OBJECTS} ${RESULT}

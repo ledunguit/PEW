@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\Admin\Project\AssignUsersRequest;
 use App\Http\Requests\Admin\Project\CreateProjectRequest;
 use App\Interfaces\ProjectRepositoryInterface;
 use Inertia\Inertia;
@@ -50,5 +51,23 @@ class ProjectController extends BaseController
         return $this->success([
             "project" => $project
         ]);
+    }
+
+    public function assignUsers(AssignUsersRequest $request)
+    {
+        $projectId = $request->input("project_id");
+
+        if (!$this->projectRepository->checkExistProjectId($projectId)) {
+            return $this->error([]);
+        }
+
+        return $this->projectRepository->assignUsers($projectId, $request->input("user_ids"));
+    }
+
+    public function delete($id)
+    {
+        $this->projectRepository->delete($id);
+
+        return $this->success([]);
     }
 }

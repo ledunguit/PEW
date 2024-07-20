@@ -9,6 +9,10 @@ export type CreateProjectForm = {
     end_date: Dayjs;
 };
 
+export type AssignUserForm = {
+    users: number[];
+};
+
 export type Project = {
     id: number;
     name: string;

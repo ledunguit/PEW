@@ -10,19 +10,40 @@ import {
     App,
 } from "antd";
 import AdminLayout from "@/layouts/admin";
-import { CreateProjectForm, Project } from "@/types";
+import { AssignUserForm, CreateProjectForm, Project } from "@/types";
 import { LuDelete, LuPlus, LuUser2 } from "react-icons/lu";
 import { PiFileCsv } from "react-icons/pi";
 import CreateProjectModal from "./components/create-project-modal";
+import { projectService } from "@/services/modules/admin/project";
+import { router } from "@inertiajs/react";
+import { FiBookOpen } from "react-icons/fi";
+import AssingUserModal from "./components/assign-user-modal";
 
 const ProjectIndexPage = ({ projects }: { projects: Project[] }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [createProjectForm] = Form.useForm<CreateProjectForm>();
+    const [isCreateProjectModalOpen, setIsCreateProjectModalOpen] =
+        useState(false);
+
+    const [assignUserForm] = Form.useForm<AssignUserForm>();
+    const [assigningProject, setAssigningProject] = useState<Project | null>(
+        null
+    );
+    const [isAssignUserModalOpen, setIsAssignUserModalOpen] = useState(false);
+
     const [isLoading, setIsLoading] = useState(false);
-    const [form] = Form.useForm<CreateProjectForm>();
     const { message } = App.useApp();
 
     const handleDeleteProject = async (id: number) => {
-        await message.success(`Project ${id} deleted successfully`);
+        try {
+            await projectService.delete(id);
+
+            message.success(`Project ${id} deleted successfully`);
+
+            router.reload();
+        } catch (error) {
+            message.error("Something went wrong, please try again");
+            console.log(error);
+        }
     };
 
     const TableColumns: TableProps["columns"] = [
@@ -71,11 +92,21 @@ const ProjectIndexPage = ({ projects }: { projects: Project[] }) => {
                     <Button
                         type="dashed"
                         onClick={() => {
-                            console.log(record);
+                            setAssigningProject(record);
+                            setIsAssignUserModalOpen(true);
                         }}
                         icon={<LuUser2 />}
                     >
-                        Users
+                        Assign Users
+                    </Button>
+                    <Button
+                        type="dashed"
+                        onClick={() => {
+                            console.log(record);
+                        }}
+                        icon={<FiBookOpen />}
+                    >
+                        Documents
                     </Button>
                     <Button
                         type="primary"
@@ -105,7 +136,7 @@ const ProjectIndexPage = ({ projects }: { projects: Project[] }) => {
                     <Button
                         type="primary"
                         icon={<LuPlus />}
-                        onClick={() => setIsModalOpen(true)}
+                        onClick={() => setIsCreateProjectModalOpen(true)}
                     >
                         Create
                     </Button>
@@ -125,10 +156,18 @@ const ProjectIndexPage = ({ projects }: { projects: Project[] }) => {
             </Flex>
 
             <CreateProjectModal
-                isModalOpen={isModalOpen}
-                setIsModalOpen={setIsModalOpen}
-                isLoading={isLoading}
-                form={form}
+                open={isCreateProjectModalOpen}
+                setOpen={setIsCreateProjectModalOpen}
+                loading={isLoading}
+                form={createProjectForm}
+            />
+
+            <AssingUserModal
+                open={isAssignUserModalOpen}
+                setOpen={setIsAssignUserModalOpen}
+                loading={isLoading}
+                form={assignUserForm}
+                assigningProject={assigningProject}
             />
         </>
     );

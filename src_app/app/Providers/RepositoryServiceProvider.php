@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Interfaces\UserRepositoryInterface;
+use App\Repositories\UserRepository;
 use App\Interfaces\SettingRepositoryInterface;
 use App\Repositories\SettingRepository;
 use App\Interfaces\ProjectRepositoryInterface;
@@ -17,6 +19,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->bind(SettingRepositoryInterface::class, SettingRepository::class);
         $this->app->bind(ProjectRepositoryInterface::class, ProjectRepository::class);
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
     }
 
     /**

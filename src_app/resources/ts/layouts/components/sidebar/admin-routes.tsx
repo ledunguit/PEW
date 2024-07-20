@@ -1,11 +1,12 @@
 import React from "react";
 import { ROUTES } from "@/route";
 import { MenuProps } from "antd";
-import { FiSettings, FiUser } from "react-icons/fi";
+import { FiSettings } from "react-icons/fi";
 import { LuFolderHeart, LuUsers2 } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
 import { MdInfoOutline } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
+import { SlDocs } from "react-icons/sl";
 
 export const ADMIN_MENU_ITEMS: MenuProps["items"] = [
     {
@@ -22,6 +23,14 @@ export const ADMIN_MENU_ITEMS: MenuProps["items"] = [
         label: "Projects",
         onClick: () => {
             window.location.href = ROUTES.ADMIN.PROJECTS.INDEX;
+        },
+    },
+    {
+        key: "admin/documents",
+        icon: <SlDocs />,
+        label: "Documents",
+        onClick: () => {
+            window.location.href = ROUTES.ADMIN.DOCUMENTS.INDEX;
         },
     },
     {

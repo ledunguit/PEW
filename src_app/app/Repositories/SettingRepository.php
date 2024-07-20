@@ -20,7 +20,7 @@ class SettingRepository extends BaseRepository implements SettingRepositoryInter
 
     public function isSetKeypair(string $userId): bool
     {
-        $isSet = $this->findWithCondition([
+        $isSet = $this->findFirstWithCondition([
             'user_id' => $userId,
         ]);
 
@@ -43,7 +43,7 @@ class SettingRepository extends BaseRepository implements SettingRepositoryInter
 
     public function getKeyPathOfUser(string $userId): string
     {
-        $setting = $this->findWithCondition([
+        $setting = $this->findFirstWithCondition([
             'user_id' => $userId,
         ]);
 

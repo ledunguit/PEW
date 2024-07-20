@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 interface BaseRepositoryInterface
 {
+    public function getModel(): Model;
     public function all();
 
     public function find($id);
 
-    public function findWithCondition($condition);
+    public function findFirstWithCondition($condition);
+
+    public function findManyWithCondition($condition);
 
     public function create(array $data);
 

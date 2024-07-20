@@ -41,6 +41,9 @@ Route::name('admin.')->middleware(["auth", "role:admin"])->prefix('/admin')->gro
     Route::name('project.')->prefix('/projects')->group(function () {
         Route::get('/', [AdminProjectController::class, 'index'])->name('index');
         Route::post('/create', [AdminProjectController::class, 'create'])->name('create');
+        Route::delete('/delete/{id}', [AdminProjectController::class, 'delete'])->name('delete');
+
+        Route::post('/assign-users', [AdminProjectController::class, 'assignUsers'])->name('assignUsers');
     });
 
     Route::name('profile.')->prefix('/profile')->group(function () {
@@ -54,6 +57,8 @@ Route::name('admin.')->middleware(["auth", "role:admin"])->prefix('/admin')->gro
     Route::name('user.')->prefix('/users')->group(function () {
         Route::get('/', [AdminUserManagementController::class, 'index'])->name('index');
         Route::get('/create', [AdminUserManagementController::class, 'create'])->name('create');
+
+        Route::post('/get-users-like-by-name', [AdminUserManagementController::class, 'getUserLikeByName'])->name('getUserLikeByName');
     });
 });
 

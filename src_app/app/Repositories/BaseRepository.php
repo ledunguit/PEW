@@ -11,6 +11,11 @@ class BaseRepository implements BaseRepositoryInterface
     {
     }
 
+    public function getModel(): Model
+    {
+        return $this->model;
+    }
+
     public function all()
     {
         return $this->model->all();
@@ -21,9 +26,14 @@ class BaseRepository implements BaseRepositoryInterface
         return $this->model->find($id);
     }
 
-    public function findWithCondition($condition)
+    public function findFirstWithCondition($condition)
     {
         return $this->model->where($condition)->first();
+    }
+
+    public function findManyWithCondition($condition)
+    {
+        return $this->model->where($condition)->get();
     }
 
     public function create(array $data)

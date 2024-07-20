@@ -18,14 +18,14 @@ import { router } from "@inertiajs/react";
 
 const CreateProjectModal = ({
     form,
-    isModalOpen,
-    isLoading,
-    setIsModalOpen,
+    open,
+    loading,
+    setOpen,
 }: {
     form: FormInstance<CreateProjectForm>;
-    isModalOpen: boolean;
-    isLoading: boolean;
-    setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    open: boolean;
+    loading: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
     const { message } = App.useApp();
 
@@ -40,15 +40,15 @@ const CreateProjectModal = ({
             console.log(error);
         }
 
-        setIsModalOpen(false);
+        setOpen(false);
         form.resetFields();
     };
 
     return (
         <Modal
             title="Create Project"
-            open={isModalOpen}
-            loading={isLoading}
+            open={open}
+            loading={loading}
             okText={
                 <Space>
                     <CiSaveUp1 />
@@ -57,7 +57,7 @@ const CreateProjectModal = ({
             }
             onOk={() => form.submit()}
             onCancel={() => {
-                setIsModalOpen(false);
+                setOpen(false);
                 form.resetFields();
             }}
         >

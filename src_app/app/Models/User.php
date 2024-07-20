@@ -51,8 +51,8 @@ class User extends Authenticatable
         return $this->role;
     }
 
-    public function keyPairs()
+    public function projects()
     {
-        return $this->hasMany(KeyPair::class);
+        return $this->belongsToMany(Project::class, 'project_user', 'user_id', 'project_id');
     }
 }
