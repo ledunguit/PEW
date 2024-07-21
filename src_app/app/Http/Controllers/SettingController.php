@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\Setting\CreateKeyPairRequest;
 use App\Http\Requests\User\Setting\GetKeyPairRequest;
+use App\Interfaces\ProjectRepositoryInterface;
 use App\Interfaces\SettingRepositoryInterface;
 use App\Services\VaultService;
 use Illuminate\Http\Request;
@@ -14,16 +15,25 @@ use Illuminate\Support\Str;
 
 class SettingController extends BaseController
 {
-    public function __construct(protected SettingRepositoryInterface $settingRepository, protected VaultService $vaultService)
-    {
+    public function __construct(
+        protected SettingRepositoryInterface $settingRepository,
+        protected ProjectRepositoryInterface $projectRepository,
+        protected VaultService $vaultService
+    ) {
+        parent::__construct();
     }
 
     public function index(Request $request)
     {
+        $user = Auth::user();
+
+        $projects = $user->projects()->get();
+
         $isSetKeyPair = $this->settingRepository->isSetKeypair($request->user()->id);
 
         return Inertia::render("setting/index", [
             "data" => [
+                "isJoinedProject" => !$projects->isEmpty(),
                 "isSetKeypair" => $isSetKeyPair,
             ],
         ]);

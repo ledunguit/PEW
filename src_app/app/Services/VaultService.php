@@ -14,7 +14,6 @@ class VaultService
     private string $secretId;
     private ?string $token;
     private string $kvPath;
-
     private int $trial = 1;
 
     public function __construct()
@@ -55,13 +54,16 @@ class VaultService
         }
     }
 
+    public function getIntCA()
+    {
+        $path = "$this->kvPath/data/int-ca";
+
+        return $this->request('GET', $path)['data'] ?? [];
+    }
+
     /**
      * Retrieve a secret from the given path.
      */
-    private function sendRequest(string $path): array
-    {
-        return $this->request('GET', $path)['data'] ?? [];
-    }
 
     /**
      * Send a request to Vault.
@@ -77,7 +79,7 @@ class VaultService
         } catch (RequestException $e) {
             if ($e->getResponse()->getStatusCode() === 403) {
                 Log::warning('Vault token expired, re-authenticating. Attempt: ' . $this->trial);
-
+                Log::error($e->getMessage());
                 $this->authenticate();
 
                 if ($this->trial < 3) {
@@ -96,13 +98,13 @@ class VaultService
     /**
      * Save a key pair for a specific user.
      */
-    public function saveKeyPair(string $userKeyPath, string $publicKey, string $secretKey): array
+    public function saveKeyPair(string $userKeyPath, string $publicKey, string $privateKey): array
     {
         $path = "{$this->kvPath}/data/users/{$userKeyPath}";
         $data = [
             'data' => [
                 'public_key' => $publicKey,
-                'secret_key' => $secretKey,
+                'private_key' => $privateKey,
             ]
         ];
 
@@ -118,14 +120,24 @@ class VaultService
     {
         $path = "{$this->kvPath}/data/users/{$userKeyPath}";
 
-        return $this->sendRequest($path);
+        return $this->request('GET', $path)['data'] ?? [];
+    }
+
+    public function getPrivateKey(string $userKeyPath): string
+    {
+        return $this->retrieveKeyPair($userKeyPath)['data']['private_key'] ?? '';
+    }
+
+    public function getPublicKey(string $userKeyPath): string
+    {
+        return $this->retrieveKeyPair($userKeyPath)['data']['public_key'] ?? '';
     }
 
     public function getMetadata(string $userKeyPath): array
     {
         $path = "{$this->kvPath}/metadata/users/{$userKeyPath}";
 
-        return $this->sendRequest($path);
+        return $this->request('GET', $path)['data'] ?? [];
     }
 
     public function getAllKeyPairs(string $userKeyPath): array

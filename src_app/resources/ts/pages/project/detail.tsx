@@ -1,15 +1,94 @@
 import React, {useState} from "react";
-import {App, Button, Descriptions, Divider, Flex, Form, Space, Upload, UploadFile, UploadProps} from "antd";
-import {Project} from "@/types";
-import {FiUpload} from "react-icons/fi";
+import {
+    App,
+    Button,
+    Descriptions,
+    Divider,
+    Flex,
+    Form,
+    Space,
+    Table,
+    TableProps, Tooltip, Typography,
+    Upload,
+    UploadFile,
+    UploadProps
+} from "antd";
+import {ProjectDetailPageData, SharedData} from "@/types";
+import {FiDelete, FiDownload, FiUpload} from "react-icons/fi";
 import {ROUTES} from "@/route";
-import {usePage} from "@inertiajs/react";
+import {router, usePage} from "@inertiajs/react";
+import {FaFileSignature} from "react-icons/fa6";
 
 
-const ProjectIndexPage = ({project}: { project: Project }) => {
+const ProjectIndexPage = ({data}: { data: ProjectDetailPageData }) => {
     const {message} = App.useApp()
-    const props = usePage().props
+    const props = usePage<SharedData>().props
     const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+    const project = data.project;
+    const documents = data.documents;
+    const user = props.auth.user;
+
+    const TableColumns: TableProps["columns"] = [
+        {
+            title: "Name",
+            dataIndex: "document_name",
+            key: "name",
+        },
+        {
+            title: "Uploaded by",
+            dataIndex: "uploaded_by",
+            key: "uploaded_by",
+            render: (_, record) => {
+                return <Typography.Text copyable>{record.created_by.name}</Typography.Text>
+            }
+        },
+        {
+            title: "Signature",
+            dataIndex: "signature",
+            key: "signature",
+            render: (_, record) => {
+                return <Typography.Text copyable>{record.signature}</Typography.Text>
+            },
+        },
+        {
+            title: "Uploaded at",
+            dataIndex: "created_at",
+            key: "created_at",
+            render: (_, record) => {
+                return <Typography.Text copyable>{new Date(record.created_at).toLocaleString()}</Typography.Text>
+            }
+        },
+        {
+            title: "Action",
+            dataIndex: "action",
+            key: "action",
+            width: 200,
+            render: (_, record) => {
+                return <Space>
+                    <Tooltip title="Download this document">
+                        <Button
+                            icon={
+                                <FiDownload/>}>
+                        </Button>
+                    </Tooltip>
+                    <Tooltip title="Verify this document">
+                        <Button icon={<FaFileSignature/>}>
+                        </Button>
+                    </Tooltip>
+                    {
+                        user.id === record.created_by.id &&
+                        <Tooltip title="Delete this document">
+                            <Button danger
+                                    icon={
+                                        <FiDelete/>}>
+                            </Button>
+                        </Tooltip>
+                    }
+                </Space>
+            }
+        }
+    ];
 
     const uploadFileProps: UploadProps = {
         name: 'document_file',
@@ -20,6 +99,9 @@ const ProjectIndexPage = ({project}: { project: Project }) => {
         onChange: async (info) => {
             if (info.file.status === 'done') {
                 setFileList([]);
+                router.reload({
+                    only: ["data"],
+                })
                 await message.success(`${info.file.name} file uploaded successfully for project ${project.project_id}`);
             } else if (info.file.status === 'error') {
                 setFileList([]);
@@ -43,8 +125,6 @@ const ProjectIndexPage = ({project}: { project: Project }) => {
         maxCount: 1
     }
 
-    console.log(project)
-
     const projectDetail = [
         {
             label: "Project ID",
@@ -66,14 +146,6 @@ const ProjectIndexPage = ({project}: { project: Project }) => {
             label: "Employees",
             children: project.number_of_employees
         },
-        {
-            label: "Start Date",
-            children: project.start_date
-        },
-        {
-            label: "End Date",
-            children: project.end_date
-        },
     ]
 
     return (
@@ -90,13 +162,19 @@ const ProjectIndexPage = ({project}: { project: Project }) => {
             <Descriptions items={projectDetail}/>
             <Space>
                 <Form layout={'vertical'}>
-                    <Form.Item label="Upload new document" name="document_file" valuePropName="upload">
+                    <Form.Item name="document_file" valuePropName="upload">
                         <Upload {...uploadFileProps}>
-                            <Button icon={<FiUpload/>}>Click to upload</Button>
+                            <Button icon={<FiUpload/>}>Click to upload new document</Button>
                         </Upload>
                     </Form.Item>
                 </Form>
             </Space>
+
+            <Table key={'key'} dataSource={documents.map((doc, index) => ({...doc, key: index}))}
+                   columns={TableColumns} scroll={{
+                x: 800,
+                y: 500
+            }}/>
         </Flex>
     );
 };

@@ -3,14 +3,14 @@
 namespace App\Repositories;
 
 use App\Interfaces\SettingRepositoryInterface;
-use App\Models\Setting;
+use App\Models\VaultSetting;
 use App\Services\VaultService;
 
 class SettingRepository extends BaseRepository implements SettingRepositoryInterface
 {
-    public function __construct(protected Setting $setting, protected VaultService $vaultService)
+    public function __construct(protected VaultSetting $vaultSetting, protected VaultService $vaultService)
     {
-        parent::__construct($setting);
+        parent::__construct($vaultSetting);
     }
 
     public function getVaultPath(): string

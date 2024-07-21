@@ -1,3 +1,5 @@
+import {Document} from "@/types";
+
 export type Project = {
     id: number
     name: string
@@ -12,3 +14,9 @@ export type Project = {
 export type ProjectPageData = {
     projects: Project[]
 }
+
+export type ProjectDetailPageData = {
+    project: Project;
+    documents: Document[]
+}
+

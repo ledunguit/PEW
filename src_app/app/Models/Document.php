@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Document extends Model
 {
-    use HasFactory;
-
     protected $hidden = [
         'document_path',
         'hash',
@@ -24,16 +22,17 @@ class Document extends Model
         'document_name',
         'document_path',
         'hash',
+        'signature',
         'created_by',
         'project_id'
     ];
 
-    public function project()
+    public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
 
-    public function createdBy()
+    public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }

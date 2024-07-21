@@ -1,44 +1,9 @@
-import { keypairService } from "@/services";
-import {
-    Keypair,
-    KeyPairAuthenticationFormType,
-    SettingPageData,
-} from "@/types";
-import { router } from "@inertiajs/react";
-import {
-    App,
-    Button,
-    Flex,
-    Form,
-    Input,
-    InputRef,
-    Modal,
-    Select,
-    SelectProps,
-    Space,
-    Table,
-    TableProps,
-    Typography,
-} from "antd";
-import React, { useRef, useState } from "react";
-import { FiInfo, FiKey, FiPlus, FiSettings } from "react-icons/fi";
+import {Keypair, SettingPageData,} from "@/types";
+import {App, Button, Flex, Space, Table, TableProps, Typography,} from "antd";
+import React, {useState} from "react";
+import {FiSettings} from "react-icons/fi";
 
-const { Title, Text } = Typography;
-
-const algorithmSelections: SelectProps["options"] = [
-    {
-        label: "Dilithium2 (default)",
-        value: "dilithium2",
-    },
-    {
-        label: "Dilithium3",
-        value: "dilithium3",
-    },
-    {
-        label: "Dilithium5",
-        value: "dilithium5",
-    },
-];
+const {Title, Text} = Typography;
 
 const TableColumns: TableProps["columns"] = [
     {
@@ -69,110 +34,41 @@ const TableColumns: TableProps["columns"] = [
     },
 ];
 
-const SettingPage = ({ data }: { data: SettingPageData }) => {
-    const [algorithm, setAlgorithm] = useState("dilithium2");
-    const [isShowModalConfirmShowKeyPair, setIsShowModalConfirmShowKeyPair] =
-        useState(false);
+const SettingPage = ({data}: { data: SettingPageData }) => {
     const [keyPairs, setKeyPairs] = useState<Keypair[]>([]);
-    const { message } = App.useApp();
-    const [authenticationForm] = Form.useForm<KeyPairAuthenticationFormType>();
-    const passwordInputRef = useRef<InputRef>(null);
 
-    const handleCreateNewKeyPair = async () => {
-        try {
-            const res = await keypairService.create({ algorithm });
+    console.log("data:", data);
 
-            router.reload();
-            await message.success(res.data.message);
-        } catch (err: any) {
-            await message.error(err.data.message);
-        }
-    };
+    if (!data.isJoinedProject) {
+        return (
+            <>
+                <Title className="flex items-center gap-2" level={4}>
+                    <FiSettings/>
+                    Setting
+                </Title>
 
-    const handleAuthenticateKeyPair = async (
-        values: KeyPairAuthenticationFormType
-    ) => {
-        try {
-            const res = await keypairService.getKeyPair({
-                password: values.password,
-            });
-            setKeyPairs(res.data.keypair);
-            setIsShowModalConfirmShowKeyPair(false);
-            await message.success(res.data.message);
-        } catch (err: any) {
-            passwordInputRef.current?.focus();
-            authenticationForm.setFieldValue("password", "");
-            await message.error(err.data.message);
-        }
-    };
+                <Text>You have not joined any project. Please contact admin for more information.</Text>
+            </>
+        );
+    }
 
-    const handleShowKeyPair = async () => {
-        if (keyPairs.length) {
-            setKeyPairs([]);
-
-            await message.success("Hide key pair successfully");
-        } else {
-            setIsShowModalConfirmShowKeyPair(true);
-        }
-    };
 
     return (
         <>
             <Flex vertical>
                 <Title className="flex items-center gap-2" level={4}>
-                    <FiSettings />
+                    <FiSettings/>
                     Setting
                 </Title>
                 {!data.isSetKeypair && (
                     <Space className="mt-2 w-fit gap-4" direction="vertical">
                         <Text>
-                            You have no keypair to sign the document, please
-                            create one.
+                            You have no keypair to sign the document, please contact admin for more information.
                         </Text>
-                        <Select
-                            className="min-w-[200px]"
-                            onChange={(value) => setAlgorithm(value)}
-                            defaultValue={"dilithium2"}
-                            options={algorithmSelections}
-                            placeholder="Select algorithm"
-                        ></Select>
-                        <Button
-                            className="w-fit"
-                            type="primary"
-                            onClick={handleCreateNewKeyPair}
-                        >
-                            <FiKey />
-                            Create new
-                        </Button>
                     </Space>
                 )}
-                <Space direction="vertical">
-                    <Text>
-                        <Space>
-                            <FiInfo />
-                            You have setting your keypair, you can manage it
-                            here.
-                        </Space>
-                    </Text>
-                    <Space>
-                        <Button onClick={handleShowKeyPair}>
-                            <Space>
-                                <FiKey />
-                                {keyPairs.length ? (
-                                    <Text>Hide key pair</Text>
-                                ) : (
-                                    <Text>Show key pair</Text>
-                                )}
-                            </Space>
-                        </Button>
 
-                        <Button onClick={handleCreateNewKeyPair}>
-                            <FiPlus /> Gen new keypair
-                        </Button>
-                    </Space>
-                </Space>
-
-                {!keyPairs && (
+                {keyPairs.length > 0 && (
                     <Table
                         className="mt-4"
                         locale={{
@@ -183,44 +79,6 @@ const SettingPage = ({ data }: { data: SettingPageData }) => {
                     ></Table>
                 )}
             </Flex>
-
-            <Modal
-                open={isShowModalConfirmShowKeyPair}
-                cancelText="Cancel"
-                okText="Get key"
-                onCancel={() => setIsShowModalConfirmShowKeyPair(false)}
-                onOk={() => {
-                    authenticationForm.submit();
-                }}
-                afterOpenChange={(open) =>
-                    open && passwordInputRef.current?.focus()
-                }
-            >
-                <Title level={4}>Need authentication</Title>
-                <Form
-                    form={authenticationForm}
-                    onFinish={handleAuthenticateKeyPair}
-                    name="authenticationKeyPairForm"
-                    layout="vertical"
-                    autoComplete="off"
-                >
-                    <Form.Item
-                        name="password"
-                        label="Your account password"
-                        rules={[
-                            {
-                                required: true,
-                                message: "Please input your password!",
-                            },
-                        ]}
-                    >
-                        <Input.Password
-                            ref={passwordInputRef}
-                            placeholder="Please enter password"
-                        ></Input.Password>
-                    </Form.Item>
-                </Form>
-            </Modal>
         </>
     );
 };

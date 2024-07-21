@@ -45,6 +45,7 @@ export const ROUTES = {
             UPDATE_ROLE: "/admin/users/update-role",
             UPDATE_STATUS: "/admin/users/update-status",
             GET_USERS_LIKE_BY_NAME: `/admin/users/get-users-like-by-name`,
+            GENERATE_KEY_PAIR: "/admin/users/generate-key-pair",
         },
         SETTINGS: {
             INDEX: "/admin/settings",

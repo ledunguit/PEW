@@ -1,5 +1,7 @@
-import { DilithiumKeyPair } from "@/types";
+import {DilithiumKeyPair} from "@/types";
+
 export type SettingPageData = {
+    isJoinedProject: boolean;
     isSetKeypair: boolean;
 };
 

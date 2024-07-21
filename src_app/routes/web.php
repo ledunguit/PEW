@@ -1,11 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\UserManagementController as AdminUserManagementController;
-use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
-
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
@@ -58,7 +57,11 @@ Route::name('admin.')->middleware(["auth", "role:admin"])->prefix('/admin')->gro
         Route::get('/', [AdminUserManagementController::class, 'index'])->name('index');
         Route::get('/create', [AdminUserManagementController::class, 'create'])->name('create');
 
-        Route::post('/get-users-like-by-name', [AdminUserManagementController::class, 'getUserLikeByName'])->name('getUserLikeByName');
+        Route::post('/get-users-like-by-name',
+            [AdminUserManagementController::class, 'getUserLikeByName'])->name('getUserLikeByName');
+
+        Route::post('/generate-key-pair',
+            [AdminUserManagementController::class, 'generateKeyPair'])->name('generateKeyPair');
     });
 });
 

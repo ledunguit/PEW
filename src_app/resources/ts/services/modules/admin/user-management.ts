@@ -1,6 +1,6 @@
-import { ROUTES } from "@/route";
+import {ROUTES} from "@/route";
 import axiosService from "@/services/http";
-import { ResponseSuccessType } from "@/types";
+import {ResponseSuccessType} from "@/types";
 
 export const userManagementService = {
     getUsersLikeByName: (email: string) => {
@@ -11,4 +11,12 @@ export const userManagementService = {
             }
         );
     },
+    generateKeyPair: (user_id: number) => {
+        return axiosService.post<ResponseSuccessType>(
+            ROUTES.ADMIN.USERS.GENERATE_KEY_PAIR,
+            {
+                user_id,
+            }
+        );
+    }
 };

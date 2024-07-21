@@ -1,6 +1,7 @@
 export type SharedData = {
     route: string;
     auth: AuthData;
+    csrf_token: string
 };
 
 export type AuthData = {
