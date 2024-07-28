@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\UserManagementController as AdminUserManagementController;
 use App\Http\Controllers\AuthController;
@@ -45,6 +46,11 @@ Route::name('admin.')->middleware(["auth", "role:admin"])->prefix('/admin')->gro
         Route::post('/assign-users', [AdminProjectController::class, 'assignUsers'])->name('assignUsers');
     });
 
+    Route::name('document.')->prefix('/documents')->group(function () {
+        Route::get('/', [AdminDocumentController::class, 'index'])->name('index');
+        Route::get('/download-document/{project_id}/{document_id}', [AdminDocumentController::class, 'downloadDocument'])->name('downloadDocument');
+    });
+
     Route::name('profile.')->prefix('/profile')->group(function () {
         Route::get('/', [AdminProfileController::class, 'index'])->name('index');
     });
@@ -57,11 +63,15 @@ Route::name('admin.')->middleware(["auth", "role:admin"])->prefix('/admin')->gro
         Route::get('/', [AdminUserManagementController::class, 'index'])->name('index');
         Route::get('/create', [AdminUserManagementController::class, 'create'])->name('create');
 
-        Route::post('/get-users-like-by-name',
-            [AdminUserManagementController::class, 'getUserLikeByName'])->name('getUserLikeByName');
+        Route::post(
+            '/get-users-like-by-name',
+            [AdminUserManagementController::class, 'getUserLikeByName']
+        )->name('getUserLikeByName');
 
-        Route::post('/generate-key-pair',
-            [AdminUserManagementController::class, 'generateKeyPair'])->name('generateKeyPair');
+        Route::post(
+            '/generate-key-pair',
+            [AdminUserManagementController::class, 'generateKeyPair']
+        )->name('generateKeyPair');
     });
 });
 
@@ -74,10 +84,10 @@ Route::group(["middleware" => ["auth", "role:user"]], function () {
         Route::get('/', [ProjectController::class, 'index'])->name('index');
         Route::get('/detail/{project_id}', [ProjectController::class, 'detail'])->name('detail');
         Route::post('/upload-document', [ProjectController::class, 'uploadDocument'])->name('uploadDocument');
+        Route::get('/download-document/{project_id}/{document_id}', [ProjectController::class, 'downloadDocument'])->name('downloadDocument');
     });
 
     Route::name("document.")->prefix('/documents')->group(function () {
-        Route::get("/", [DocumentController::class, "index"])->name("index");
         Route::post("/upload", [DocumentController::class, "upload"])->name("upload");
     });
 

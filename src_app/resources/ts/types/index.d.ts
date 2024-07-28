@@ -11,3 +11,4 @@ export * from "./pages/document";
 // Admin
 export * from "./pages/admin/project";
 export * from "./pages/admin/user-management";
+export * from "./pages/admin/document";

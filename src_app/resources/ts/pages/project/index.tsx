@@ -1,11 +1,11 @@
 import React from "react";
-import {Button, Divider, Flex, Space, Table, TableProps} from "antd";
-import {Project, ProjectPageData} from "@/types";
-import {FiBookOpen} from "react-icons/fi";
-import {router} from "@inertiajs/react";
-import {ROUTES} from "@/route";
+import { Button, Divider, Flex, Space, Table, TableProps } from "antd";
+import { Project, ProjectPageData } from "@/types";
+import { FiBookOpen } from "react-icons/fi";
+import { router } from "@inertiajs/react";
+import { ROUTES } from "@/route";
 
-const ProjectIndexPage = ({data}: {data: ProjectPageData}) => {
+const ProjectIndexPage = ({ data }: { data: ProjectPageData }) => {
     const TableColumns: TableProps["columns"] = [
         {
             key: "name",
@@ -16,6 +16,16 @@ const ProjectIndexPage = ({data}: {data: ProjectPageData}) => {
             key: "project_id",
             title: "Project ID",
             dataIndex: "project_id",
+        },
+        {
+            key: "documents_count",
+            title: "Documents Count",
+            dataIndex: "documents_count",
+        },
+        {
+            title: "Members",
+            dataIndex: "users_count",
+            key: "users_count",
         },
         {
             key: "description",
@@ -53,15 +63,18 @@ const ProjectIndexPage = ({data}: {data: ProjectPageData}) => {
                         type="primary"
                         icon={<FiBookOpen />}
                         onClick={() => {
-                            router.visit(ROUTES.USER.PROJECTS.DETAIL(record.project_id));
+                            router.visit(
+                                ROUTES.USER.PROJECTS.DETAIL(record.project_id)
+                            );
                         }}
                     >
                         View
                     </Button>
                 </Space>
-            )
+            ),
         },
     ];
+
     return (
         <Flex vertical>
             <Divider

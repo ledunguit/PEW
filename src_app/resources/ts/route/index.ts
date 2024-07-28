@@ -11,6 +11,8 @@ export const ROUTES = {
             INDEX: "/projects",
             DETAIL: (projectId: string) => `/projects/detail/${projectId}`,
             UPLOAD_DOCUMENT: "/projects/upload-document",
+            DOWNLOAD_DOCUMENT: (projectId: string, documentId: number) =>
+                `/projects/download-document/${projectId}/${documentId}`,
         },
         SETTINGS: {
             INDEX: "/settings",
@@ -34,6 +36,8 @@ export const ROUTES = {
             EDIT: "/admin/documents/edit",
             DELETE: (id: number) => `/admin/documents/delete/${id}`,
             UPDATE: "/admin/documents/update",
+            DOWNLOAD_DOCUMENT: (projectId: string, documentId: number) =>
+                `/admin/documents/download-document/${projectId}/${documentId}`,
         },
         USERS: {
             INDEX: "/admin/users",

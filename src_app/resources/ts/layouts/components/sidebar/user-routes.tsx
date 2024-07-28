@@ -25,14 +25,6 @@ export const USER_MENU_ITEMS: MenuProps["items"] = [
         },
     },
     {
-        key: "documents",
-        icon: <SlDocs />,
-        label: "Documents",
-        onClick: () => {
-            window.location.href = ROUTES.USER.DOCUMENTS;
-        },
-    },
-    {
         key: "profile",
         icon: <FiUser />,
         label: "Profile",

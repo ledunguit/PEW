@@ -23,6 +23,11 @@ class Project extends Model
         "end_date" => "datetime:H:i:s d/m/Y"
     ];
 
+    protected $withCount = [
+        "users",
+        "documents"
+    ];
+
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, "project_user", "project_id", "user_id");

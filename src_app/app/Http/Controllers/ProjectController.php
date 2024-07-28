@@ -108,4 +108,25 @@ class ProjectController extends BaseController
             'message' => 'Document uploaded'
         ]);
     }
+
+    public function downloadDocument(string $projectId, string $documentId)
+    {
+        $project = Auth::user()->projects()->where('projects.project_id', $projectId)->first();
+
+        if (!$project) {
+            return $this->error([
+                'message' => 'Project not found'
+            ]);
+        }
+
+        $document = $project->documents()->where('id', $documentId)->first();
+
+        if (!$document) {
+            return $this->error([
+                'message' => 'Document not found for this project'
+            ]);
+        }
+
+        return response()->download(storage_path("app/$document->document_path"), $document->document_name);
+    }
 }

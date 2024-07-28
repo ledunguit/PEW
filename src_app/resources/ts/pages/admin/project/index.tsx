@@ -58,6 +58,16 @@ const ProjectIndexPage = ({ projects }: { projects: Project[] }) => {
             dataIndex: "project_id",
         },
         {
+            key: "documents_count",
+            title: "Documents Count",
+            dataIndex: "documents_count",
+        },
+        {
+            title: "Users Assigned",
+            dataIndex: "users_count",
+            key: "users_count",
+        },
+        {
             key: "description",
             title: "Description",
             dataIndex: "description",
