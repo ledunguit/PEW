@@ -129,4 +129,35 @@ class ProjectController extends BaseController
 
         return response()->download(storage_path("app/$document->document_path"), $document->document_name);
     }
+
+    public function deleteDocument(string $projectId, string $documentId)
+    {
+        $project = Auth::user()->projects()->where('projects.project_id', $projectId)->first();
+
+        if (!$project) {
+            return $this->error([
+                'message' => 'Project not found'
+            ]);
+        }
+
+        $document = $project->documents()->where('id', $documentId)->first();
+
+        if (!$document) {
+            return $this->error([
+                'message' => 'Document not found for this project'
+            ]);
+        }
+
+        if ($document->created_by !== Auth::user()->id) {
+            return $this->error([
+                'message' => 'You are not authorized to delete this document'
+            ]);
+        }
+
+        $document->delete();
+
+        return $this->success([
+            'message' => 'Document deleted'
+        ]);
+    }
 }

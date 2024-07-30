@@ -23,8 +23,9 @@ import {
     FiUpload,
 } from "react-icons/fi";
 import { ROUTES } from "@/route";
-import { Link, router, usePage } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { FaFileSignature } from "react-icons/fa6";
+import projectService from "@/services/modules/project";
 
 const ProjectIndexPage = ({ data }: { data: ProjectDetailPageData }) => {
     const { message } = App.useApp();
@@ -34,6 +35,24 @@ const ProjectIndexPage = ({ data }: { data: ProjectDetailPageData }) => {
     const project = data.project;
     const documents = data.documents;
     const user = props.auth.user;
+
+    const handleDeleteDocument = async (
+        projectId: string,
+        documentId: number
+    ) => {
+        try {
+            await projectService.deleteDocument(projectId, documentId);
+
+            message.success("Document deleted successfully");
+
+            router.reload({
+                only: ["data"],
+            });
+        } catch (error) {
+            message.error("Something went wrong, please try again");
+            console.log(error);
+        }
+    };
 
     const TableColumns: TableProps<Document>["columns"] = [
         {
@@ -101,7 +120,16 @@ const ProjectIndexPage = ({ data }: { data: ProjectDetailPageData }) => {
                         </Tooltip>
                         {user.id === record.created_by.id && (
                             <Tooltip title="Delete this document">
-                                <Button danger icon={<FiDelete />}></Button>
+                                <Button
+                                    danger
+                                    icon={<FiDelete />}
+                                    onClick={() =>
+                                        handleDeleteDocument(
+                                            project.project_id,
+                                            record.id
+                                        )
+                                    }
+                                ></Button>
                             </Tooltip>
                         )}
                     </Space>

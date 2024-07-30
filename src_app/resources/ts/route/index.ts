@@ -13,6 +13,8 @@ export const ROUTES = {
             UPLOAD_DOCUMENT: "/projects/upload-document",
             DOWNLOAD_DOCUMENT: (projectId: string, documentId: number) =>
                 `/projects/download-document/${projectId}/${documentId}`,
+            DELETE_DOCUMENT: (projectId: string, documentId: number) =>
+                `/projects/delete-document/${projectId}/${documentId}`,
         },
         SETTINGS: {
             INDEX: "/settings",

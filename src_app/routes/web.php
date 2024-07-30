@@ -87,6 +87,7 @@ Route::group(["middleware" => ["auth", "role:user", "userStatus"]], function () 
         Route::get('/detail/{project_id}', [ProjectController::class, 'detail'])->name('detail');
         Route::post('/upload-document', [ProjectController::class, 'uploadDocument'])->name('uploadDocument');
         Route::get('/download-document/{project_id}/{document_id}', [ProjectController::class, 'downloadDocument'])->name('downloadDocument');
+        Route::delete('/delete-document/{project_id}/{document_id}', [ProjectController::class, 'deleteDocument'])->name('deleteDocument');
     });
 
     Route::name("document.")->prefix('/documents')->group(function () {
