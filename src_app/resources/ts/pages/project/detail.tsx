@@ -16,7 +16,12 @@ import {
     UploadProps,
 } from "antd";
 import { Document, ProjectDetailPageData, SharedData } from "@/types";
-import { FiDelete, FiDownload, FiUpload } from "react-icons/fi";
+import {
+    FiAlertTriangle,
+    FiDelete,
+    FiDownload,
+    FiUpload,
+} from "react-icons/fi";
 import { ROUTES } from "@/route";
 import { Link, router, usePage } from "@inertiajs/react";
 import { FaFileSignature } from "react-icons/fa6";
@@ -166,7 +171,7 @@ const ProjectIndexPage = ({ data }: { data: ProjectDetailPageData }) => {
     ];
 
     return (
-        <Flex vertical>
+        <Flex vertical gap={10}>
             <Divider
                 className="select-none !m-0 !mb-4"
                 type="horizontal"
@@ -177,17 +182,27 @@ const ProjectIndexPage = ({ data }: { data: ProjectDetailPageData }) => {
             </Divider>
 
             <Descriptions items={projectDetail} />
-            <Space>
-                <Form layout={"vertical"}>
-                    <Form.Item name="document_file" valuePropName="upload">
-                        <Upload {...uploadFileProps}>
-                            <Button icon={<FiUpload />}>
-                                Click to upload new document
-                            </Button>
-                        </Upload>
-                    </Form.Item>
-                </Form>
-            </Space>
+            {user.vault_setting ? (
+                <Space>
+                    <Form layout={"vertical"}>
+                        <Form.Item name="document_file" valuePropName="upload">
+                            <Upload {...uploadFileProps}>
+                                <Button icon={<FiUpload />}>
+                                    Click to upload new document
+                                </Button>
+                            </Upload>
+                        </Form.Item>
+                    </Form>
+                </Space>
+            ) : (
+                <Typography.Text>
+                    <Space>
+                        <FiAlertTriangle style={{ color: "red" }} />
+                        You do not have any keypair to sign the document, please
+                        contact the administrator.
+                    </Space>
+                </Typography.Text>
+            )}
 
             <Table
                 key={"key"}

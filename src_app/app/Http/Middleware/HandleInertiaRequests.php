@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 use Illuminate\Support\Facades\Route;
 
@@ -36,9 +37,17 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = Auth::user();
+
+        if ($user) {
+            $user->load('vault_setting');
+        }
+
+        $userInfo = $user ? $user->only('id', 'name', 'email', 'role', 'status', 'vault_setting') : null;
+
         return array_merge(parent::share($request), [
             'route' => Route::current()->uri ?? Route::getCurrentRoute()->getPrefix(),
-            'auth.user' => fn () => $request->user() ? $request->user()->only('id', 'name', 'email', 'role') : null,
+            'auth.user' => $userInfo,
             'csrf_token' => csrf_token(),
         ]);
     }

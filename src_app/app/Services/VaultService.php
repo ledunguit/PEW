@@ -68,7 +68,7 @@ class VaultService
     /**
      * Send a request to Vault.
      */
-    private function request(string $method, string $path, array $options = []): array
+    private function request(string $method, string $path, array $options = []): array|null
     {
         try {
             $response = $this->client->request($method, "v1/{$path}", array_merge([
@@ -150,9 +150,16 @@ class VaultService
     /**
      * Delete the key pair for a specific user.
      */
-    public function deleteKeyPair(string $userKeyPath): array
+    public function deleteKeyPair(string $userKeyPath): array|null
     {
         $path = "{$this->kvPath}/data/users/{$userKeyPath}";
+        return $this->request('DELETE', $path);
+    }
+
+    public function destroyKeyPair(string $userKeyPath, array $versions = [1]): array|null
+    {
+        $path = "{$this->kvPath}/metadata/users/{$userKeyPath}";
+
         return $this->request('DELETE', $path);
     }
 
@@ -182,11 +189,14 @@ class VaultService
     {
         $envPath = base_path('.env');
         if (file_exists($envPath)) {
-            file_put_contents($envPath, str_replace(
-                'VAULT_CLIENT_TOKEN=' . config('vault.token'),
-                'VAULT_CLIENT_TOKEN=' . $token,
-                file_get_contents($envPath)
-            ));
+            file_put_contents(
+                $envPath,
+                str_replace(
+                    'VAULT_CLIENT_TOKEN=' . config('vault.token'),
+                    'VAULT_CLIENT_TOKEN=' . $token,
+                    file_get_contents($envPath)
+                )
+            );
         }
     }
 }

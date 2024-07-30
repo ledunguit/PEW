@@ -61,7 +61,9 @@ Route::name('admin.')->middleware(["auth", "role:admin"])->prefix('/admin')->gro
 
     Route::name('user.')->prefix('/users')->group(function () {
         Route::get('/', [AdminUserManagementController::class, 'index'])->name('index');
-        Route::get('/create', [AdminUserManagementController::class, 'create'])->name('create');
+        Route::post('/create', [AdminUserManagementController::class, 'create'])->name('create');
+        Route::delete('/delete/{id}', [AdminUserManagementController::class, 'delete'])->name('delete');
+        Route::post('/update-status/{id}', [AdminUserManagementController::class, 'updateStatus'])->name('updateStatus');
 
         Route::post(
             '/get-users-like-by-name',
@@ -75,7 +77,7 @@ Route::name('admin.')->middleware(["auth", "role:admin"])->prefix('/admin')->gro
     });
 });
 
-Route::group(["middleware" => ["auth", "role:user"]], function () {
+Route::group(["middleware" => ["auth", "role:user", "userStatus"]], function () {
     Route::name("dashboard.")->prefix('/dashboard')->group(function () {
         Route::get("/", [DashboardController::class, "index"])->name("index");
     });

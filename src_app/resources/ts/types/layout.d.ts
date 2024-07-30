@@ -1,7 +1,7 @@
 export type SharedData = {
     route: string;
     auth: AuthData;
-    csrf_token: string
+    csrf_token: string;
 };
 
 export type AuthData = {
@@ -10,5 +10,7 @@ export type AuthData = {
         email: string;
         name: string;
         role: "admin" | "user";
+        status: boolean;
+        vault_setting: any;
     };
 };

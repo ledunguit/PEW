@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\Admin\UserManagement\CreateUserRequest;
 use App\Http\Requests\Admin\UserManagement\FindUserWithEmailRequest;
 use App\Http\Requests\Admin\UserManagement\GenerateKeyPairRequest;
+use App\Http\Requests\Admin\UserManagement\UpdateUserStatusRequest;
 use App\Interfaces\SettingRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Services\VaultService;
@@ -45,8 +47,11 @@ class UserManagementController extends BaseController
 
         $users = $this->userRepository->getModel()
             ->where(function ($query) use ($request) {
-                $query->where('email', $request->input('email'))->orWhere('email', 'like',
-                    '%' . $request->input('email') . '%');
+                $query->where('email', $request->input('email'))->orWhere(
+                    'email',
+                    'like',
+                    '%' . $request->input('email') . '%'
+                );
             })->where('role', 'user')->get()->toArray();
 
         return $this->success([
@@ -90,15 +95,19 @@ class UserManagementController extends BaseController
         }
 
         // Generate the CSR for the user certificate
-        $userCSR = openssl_csr_new(array(
-            "countryName" => "VN",
-            "stateOrProvinceName" => "HCM",
-            "localityName" => "BT",
-            "organizationName" => "LeDungOQS",
-            "organizationalUnitName" => "InternalFileSharing",
-            "commonName" => $userInfo->name,
-            "emailAddress" => $userInfo->email,
-        ), $userPrivKey, $userKeyConfig);
+        $userCSR = openssl_csr_new(
+            array(
+                "countryName" => "VN",
+                "stateOrProvinceName" => "HCM",
+                "localityName" => "BT",
+                "organizationName" => "LeDungOQS",
+                "organizationalUnitName" => "InternalFileSharing",
+                "commonName" => $userInfo->name,
+                "emailAddress" => $userInfo->email,
+            ),
+            $userPrivKey,
+            $userKeyConfig
+        );
 
         if ($userCSR === false) {
             return $this->error([
@@ -107,8 +116,13 @@ class UserManagementController extends BaseController
         }
 
         // Sign the user's certificate with the Intermediate CA
-        $userCert = openssl_csr_sign($userCSR, $publicKey, $privateKey, 365,
-            $userKeyConfig);
+        $userCert = openssl_csr_sign(
+            $userCSR,
+            $publicKey,
+            $privateKey,
+            365,
+            $userKeyConfig
+        );
 
         if ($userCert === false) {
             return $this->error([
@@ -146,5 +160,43 @@ class UserManagementController extends BaseController
         return $this->success([
             "message" => "Key pair created successfully",
         ]);
+    }
+
+    public function create(CreateUserRequest $request)
+    {
+        $user = $this->userRepository->create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password')),
+            'role' => 'user',
+        ]);
+
+        return $this->success([
+            "user" => $user
+        ]);
+    }
+
+    public function delete(string $id)
+    {
+        $user = $this->userRepository->findOrFail($id);
+
+        if ($user->vault_setting) {
+            $this->vaultService->destroyKeyPair($user->vault_setting->vault_key_pair_path);
+        }
+
+        $this->userRepository->delete($id);
+
+        return $this->success([]);
+    }
+
+    public function updateStatus(string $id, UpdateUserStatusRequest $request)
+    {
+        $user = $this->userRepository->findOrFail($id);
+
+        $user->update([
+            'status' => $request->input('status'),
+        ]);
+
+        return $this->success([]);
     }
 }
