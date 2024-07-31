@@ -42,7 +42,7 @@ services:
       MYSQL_PASSWORD: Aa@123456
       ALLOW_EMPTY_PASSWORD: "true"
     ports:
-      - "3306:3306"
+      - "3307:3306"
     networks:
       - ledung-oqs
     volumes:

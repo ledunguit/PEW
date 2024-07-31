@@ -23,7 +23,7 @@ class UploadDocumentRequest extends FormRequest
     {
         return [
             "project_id" => "required",
-            "document_file" => "required|mimes:pdf,doc,docx,jpg,jpeg,png|max:20000",
+            "document_file" => "required|mimes:pdf,doc,docx,jpg,jpeg,png,xlsx,xls,csv|max:20000",
         ];
     }
 }

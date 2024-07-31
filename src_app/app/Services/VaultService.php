@@ -10,6 +10,7 @@ class VaultService
 {
     private Client $client;
     private string $baseUri;
+    private string $appRoleMethodName;
     private string $roleId;
     private string $secretId;
     private ?string $token;
@@ -19,6 +20,7 @@ class VaultService
     public function __construct()
     {
         $this->baseUri = config('vault.base_uri');
+        $this->appRoleMethodName = config('vault.app_role_method_name');
         $this->roleId = config('vault.role_id');
         $this->secretId = config('vault.secret_id');
         $this->kvPath = config('vault.kv_path');
@@ -36,7 +38,7 @@ class VaultService
     private function authenticate(): void
     {
         try {
-            $response = $this->client->post('v1/auth/approle/login', [
+            $response = $this->client->post("v1/auth/$this->appRoleMethodName/login", [
                 'json' => [
                     'role_id' => $this->roleId,
                     'secret_id' => $this->secretId,
