@@ -11,4 +11,9 @@ class DocumentRepository extends BaseRepository implements DocumentRepositoryInt
     {
         parent::__construct($document);
     }
+
+    public function getModel(): Document
+    {
+        return $this->document;
+    }
 }

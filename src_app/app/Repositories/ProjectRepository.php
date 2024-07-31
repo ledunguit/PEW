@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\ProjectRepositoryInterface;
 use App\Models\Project;
+use Illuminate\Database\Eloquent\Model;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -12,13 +13,18 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         parent::__construct($project);
     }
 
-    public function checkExistProjectId($projectId)
+    public function getModel(): Project
+    {
+        return $this->project;
+    }
+
+    public function checkExistProjectId($projectId): bool
     {
         $project = $this->findFirstWithCondition([
             "project_id" => $projectId
         ]);
 
-        return $project ? true : false;
+        return (bool) $project;
     }
 
     public function assignUsers($projectId, $userIds)
@@ -26,6 +32,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $project = $this->findFirstWithCondition([
             "project_id" => $projectId
         ]);
+
+        if (!$project) {
+            return false;
+        }
+
+        if ($project->users()->whereIn("user_id", $userIds)->exists()) {
+            return false;
+        }
 
         return $project->users()->attach($userIds);
     }

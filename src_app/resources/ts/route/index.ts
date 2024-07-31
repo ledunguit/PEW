@@ -15,6 +15,8 @@ export const ROUTES = {
                 `/projects/download-document/${projectId}/${documentId}`,
             DELETE_DOCUMENT: (projectId: string, documentId: number) =>
                 `/projects/delete-document/${projectId}/${documentId}`,
+            VERIFY_DOCUMENT: "/projects/verify-document",
+            COPY_PUBLIC_KEY: "/projects/copy-public-key",
         },
         SETTINGS: {
             INDEX: "/settings",
@@ -40,6 +42,7 @@ export const ROUTES = {
             UPDATE: "/admin/documents/update",
             DOWNLOAD_DOCUMENT: (projectId: string, documentId: number) =>
                 `/admin/documents/download-document/${projectId}/${documentId}`,
+            SHOW_DOCUMENTS: (projectId: string) => `/admin/documents/${projectId}`,
         },
         USERS: {
             INDEX: "/admin/users",

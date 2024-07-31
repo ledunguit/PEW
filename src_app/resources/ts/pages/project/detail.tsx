@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
     App,
     Button,
@@ -15,20 +15,21 @@ import {
     UploadFile,
     UploadProps,
 } from "antd";
-import { Document, ProjectDetailPageData, SharedData } from "@/types";
+import {Document, ProjectDetailPageData, SharedData} from "@/types";
 import {
     FiAlertTriangle,
     FiDelete,
     FiDownload,
     FiUpload,
 } from "react-icons/fi";
-import { ROUTES } from "@/route";
-import { router, usePage } from "@inertiajs/react";
-import { FaFileSignature } from "react-icons/fa6";
+import {ROUTES} from "@/route";
+import {router, usePage} from "@inertiajs/react";
+import {FaFileSignature} from "react-icons/fa6";
 import projectService from "@/services/modules/project";
+import {LuFileKey2} from "react-icons/lu";
 
-const ProjectIndexPage = ({ data }: { data: ProjectDetailPageData }) => {
-    const { message } = App.useApp();
+const ProjectIndexPage = ({data}: { data: ProjectDetailPageData }) => {
+    const {message} = App.useApp();
     const props = usePage<SharedData>().props;
     const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -53,6 +54,43 @@ const ProjectIndexPage = ({ data }: { data: ProjectDetailPageData }) => {
             console.log(error);
         }
     };
+
+    const handleVerifyDocument = async (
+        projectId: string,
+        documentId: number
+    ) => {
+        try {
+            const res = await projectService.verifyDocument(projectId, documentId);
+
+            message.success(res.data?.message);
+
+            router.reload({
+                only: ["data"],
+            });
+
+        } catch (error: any) {
+            if (error?.data?.message) {
+                message.error(error.data.message);
+            } else {
+                message.error("Something went wrong, please try again");
+            }
+
+            console.log(error);
+        }
+    };
+
+    const handleCopyPublicKey = async (userId: number) => {
+        try {
+            const res = await projectService.copyPublicKey(userId);
+
+            message.success(res.data?.message ?? "Public key copied successfully");
+
+            await navigator.clipboard.writeText(res.data?.publicKey);
+        } catch (error) {
+            message.error("Something went wrong, please try again");
+            console.log(error);
+        }
+    }
 
     const TableColumns: TableProps<Document>["columns"] = [
         {
@@ -112,17 +150,31 @@ const ProjectIndexPage = ({ data }: { data: ProjectDetailPageData }) => {
                                     record.id
                                 )}
                             >
-                                <Button icon={<FiDownload />}></Button>
+                                <Button icon={<FiDownload/>}></Button>
                             </a>
                         </Tooltip>
-                        <Tooltip title="Verify this document">
-                            <Button icon={<FaFileSignature />}></Button>
-                        </Tooltip>
+                        {
+                            record.created_by.id !== user.id && (
+                                <Space>
+                                    <Tooltip title="Verify this document"
+                                    >
+                                        <Button icon={<FaFileSignature/>}
+                                                onClick={() => handleVerifyDocument(project.project_id, record.id)}></Button>
+                                    </Tooltip>
+                                    <Tooltip title="Copy this user's public key">
+                                        <Button
+                                            onClick={() => handleCopyPublicKey(record.created_by.id)}
+                                            icon={<LuFileKey2/>}
+                                        ></Button>
+                                    </Tooltip>
+                                </Space>
+                            )
+                        }
                         {user.id === record.created_by.id && (
                             <Tooltip title="Delete this document">
                                 <Button
                                     danger
-                                    icon={<FiDelete />}
+                                    icon={<FiDelete/>}
                                     onClick={() =>
                                         handleDeleteDocument(
                                             project.project_id,
@@ -209,13 +261,13 @@ const ProjectIndexPage = ({ data }: { data: ProjectDetailPageData }) => {
                 Project {project.project_id}
             </Divider>
 
-            <Descriptions items={projectDetail} />
+            <Descriptions items={projectDetail}/>
             {user.vault_setting ? (
                 <Space>
                     <Form layout={"vertical"}>
                         <Form.Item name="document_file" valuePropName="upload">
                             <Upload {...uploadFileProps}>
-                                <Button icon={<FiUpload />}>
+                                <Button icon={<FiUpload/>}>
                                     Click to upload new document
                                 </Button>
                             </Upload>
@@ -225,7 +277,7 @@ const ProjectIndexPage = ({ data }: { data: ProjectDetailPageData }) => {
             ) : (
                 <Typography.Text>
                     <Space>
-                        <FiAlertTriangle style={{ color: "red" }} />
+                        <FiAlertTriangle style={{color: "red"}}/>
                         You do not have any keypair to sign the document, please
                         contact the administrator.
                     </Space>

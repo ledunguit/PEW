@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
     Flex,
     Divider,
@@ -10,16 +10,17 @@ import {
     App,
 } from "antd";
 import AdminLayout from "@/layouts/admin";
-import { AssignUserForm, CreateProjectForm, Project } from "@/types";
-import { LuDelete, LuPlus, LuUser2 } from "react-icons/lu";
-import { PiFileCsv } from "react-icons/pi";
+import {AssignUserForm, CreateProjectForm, Project} from "@/types";
+import {LuDelete, LuPlus, LuUser2} from "react-icons/lu";
+import {PiFileCsv} from "react-icons/pi";
 import CreateProjectModal from "./components/create-project-modal";
-import { projectService } from "@/services/modules/admin/project";
-import { router } from "@inertiajs/react";
-import { FiBookOpen } from "react-icons/fi";
-import AssingUserModal from "./components/assign-user-modal";
+import {projectService} from "@/services/modules/admin/project";
+import {router} from "@inertiajs/react";
+import {FiBookOpen} from "react-icons/fi";
+import AssigningUserModal from "./components/assign-user-modal";
+import {ROUTES} from "@/route";
 
-const ProjectIndexPage = ({ projects }: { projects: Project[] }) => {
+const ProjectIndexPage = ({projects}: { projects: Project[] }) => {
     const [createProjectForm] = Form.useForm<CreateProjectForm>();
     const [isCreateProjectModalOpen, setIsCreateProjectModalOpen] =
         useState(false);
@@ -31,7 +32,7 @@ const ProjectIndexPage = ({ projects }: { projects: Project[] }) => {
     const [isAssignUserModalOpen, setIsAssignUserModalOpen] = useState(false);
 
     const [isLoading, setIsLoading] = useState(false);
-    const { message } = App.useApp();
+    const {message} = App.useApp();
 
     const handleDeleteProject = async (id: number) => {
         try {
@@ -105,16 +106,14 @@ const ProjectIndexPage = ({ projects }: { projects: Project[] }) => {
                             setAssigningProject(record);
                             setIsAssignUserModalOpen(true);
                         }}
-                        icon={<LuUser2 />}
+                        icon={<LuUser2/>}
                     >
                         Assign Users
                     </Button>
                     <Button
                         type="dashed"
-                        onClick={() => {
-                            console.log(record);
-                        }}
-                        icon={<FiBookOpen />}
+                        onClick={() => router.get(ROUTES.ADMIN.DOCUMENTS.SHOW_DOCUMENTS(record.project_id))}
+                        icon={<FiBookOpen/>}
                     >
                         Documents
                     </Button>
@@ -123,7 +122,7 @@ const ProjectIndexPage = ({ projects }: { projects: Project[] }) => {
                         danger
                         onClick={() => handleDeleteProject(record.id)}
                     >
-                        <LuDelete />
+                        <LuDelete/>
                     </Button>
                 </Space>
             ),
@@ -145,18 +144,18 @@ const ProjectIndexPage = ({ projects }: { projects: Project[] }) => {
                 <Space className="mb-2">
                     <Button
                         type="primary"
-                        icon={<LuPlus />}
+                        icon={<LuPlus/>}
                         onClick={() => setIsCreateProjectModalOpen(true)}
                     >
                         Create
                     </Button>
 
-                    <Button icon={<PiFileCsv />}>Export CSV</Button>
+                    <Button icon={<PiFileCsv/>}>Export CSV</Button>
                 </Space>
 
                 <Table
                     rowKey={"project_id"}
-                    locale={{ emptyText: "No projects found" }}
+                    locale={{emptyText: "No projects found"}}
                     columns={TableColumns}
                     dataSource={projects}
                     scroll={{
@@ -172,7 +171,7 @@ const ProjectIndexPage = ({ projects }: { projects: Project[] }) => {
                 form={createProjectForm}
             />
 
-            <AssingUserModal
+            <AssigningUserModal
                 open={isAssignUserModalOpen}
                 setOpen={setIsAssignUserModalOpen}
                 loading={isLoading}

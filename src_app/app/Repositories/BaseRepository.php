@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Interfaces\BaseRepositoryInterface;
+use Illuminate\Support\Collection;
 
 class BaseRepository implements BaseRepositoryInterface
 {
@@ -16,12 +17,12 @@ class BaseRepository implements BaseRepositoryInterface
         return $this->model;
     }
 
-    public function all()
+    public function all(): Collection
     {
         return $this->model->all();
     }
 
-    public function find($id)
+    public function find($id): Model
     {
         return $this->model->find($id);
     }

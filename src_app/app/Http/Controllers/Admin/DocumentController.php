@@ -9,9 +9,11 @@ use Inertia\Inertia;
 
 class DocumentController extends BaseController
 {
-    public function __construct(protected DocumentRepositoryInterface $documentRepository, protected ProjectRepositoryInterface $projectRepository)
-    {
-
+    public function __construct(
+        protected DocumentRepositoryInterface $documentRepository,
+        protected ProjectRepositoryInterface $projectRepository
+    ) {
+        parent::__construct();
     }
 
     public function index()
@@ -46,5 +48,24 @@ class DocumentController extends BaseController
         }
 
         return response()->download(storage_path("app/$document->document_path"), $document->document_name);
+    }
+
+    public function showProjectDocuments(string $projectId)
+    {
+        $project = $this->projectRepository->getModel()->where('project_id', $projectId)->first();
+
+        if (!$project) {
+            abort(404);
+        }
+
+        $documents = $project->documents;
+
+        $documents->load('project');
+
+        return Inertia::render("admin/document/index", [
+            'data' => [
+                'documents' => $documents
+            ]
+        ]);
     }
 }

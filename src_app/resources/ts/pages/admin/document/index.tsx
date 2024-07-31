@@ -9,15 +9,15 @@ import {
     Typography,
     App,
 } from "antd";
-import { PiFileCsv } from "react-icons/pi";
-import { AdminDocument, DocumentIndexPageData } from "@/types";
-import { FiBookOpen, FiDelete, FiDownload } from "react-icons/fi";
-import { GoProjectSymlink } from "react-icons/go";
+import {PiFileCsv} from "react-icons/pi";
+import {AdminDocument, DocumentIndexPageData} from "@/types";
+import {FiBookOpen, FiDelete, FiDownload} from "react-icons/fi";
+import {GoProjectSymlink} from "react-icons/go";
 import * as _ from "lodash";
-import { ROUTES } from "@/route";
+import {ROUTES} from "@/route";
 
-const DocumentIndexPage = ({ data }: { data: DocumentIndexPageData }) => {
-    const { message } = App.useApp();
+const DocumentIndexPage = ({data}: { data: DocumentIndexPageData }) => {
+    const {message} = App.useApp();
     const projectIdFilters = _.uniqWith(
         data.documents.map((doc) => {
             return {
@@ -89,6 +89,7 @@ const DocumentIndexPage = ({ data }: { data: DocumentIndexPageData }) => {
             title: "Action",
             dataIndex: "action",
             key: "action",
+            fixed: "right",
             render: (_, record) => {
                 return (
                     <Space>
@@ -99,11 +100,11 @@ const DocumentIndexPage = ({ data }: { data: DocumentIndexPageData }) => {
                                 record.id
                             )}`}
                         >
-                            <Button type={"primary"} icon={<FiDownload />} />
+                            <Button type={"primary"} icon={<FiDownload/>}/>
                         </a>
                         <Button
                             type={"primary"}
-                            icon={<FiBookOpen />}
+                            icon={<FiBookOpen/>}
                             onClick={() => {
                                 message.warning(
                                     `Need implementation. Open document ${record.document_name}`
@@ -111,7 +112,7 @@ const DocumentIndexPage = ({ data }: { data: DocumentIndexPageData }) => {
                             }}
                         />
                         <Button
-                            icon={<GoProjectSymlink />}
+                            icon={<GoProjectSymlink/>}
                             onClick={() => {
                                 message.warning(
                                     `Need implementation. Open project ${record.project.project_id}`
@@ -120,7 +121,7 @@ const DocumentIndexPage = ({ data }: { data: DocumentIndexPageData }) => {
                         />
                         <Button
                             danger
-                            icon={<FiDelete />}
+                            icon={<FiDelete/>}
                             onClick={() => {
                                 message.warning(
                                     `Need implementation. Delete document ${record.document_name}`
@@ -145,7 +146,7 @@ const DocumentIndexPage = ({ data }: { data: DocumentIndexPageData }) => {
             </Divider>
 
             <Space className="mb-2">
-                <Button type={"primary"} icon={<PiFileCsv />}>
+                <Button type={"primary"} icon={<PiFileCsv/>}>
                     Export CSV
                 </Button>
             </Space>
@@ -154,7 +155,7 @@ const DocumentIndexPage = ({ data }: { data: DocumentIndexPageData }) => {
                 rowKey={"id"}
                 columns={TableColumns}
                 dataSource={data.documents}
-                locale={{ emptyText: "No document found" }}
+                locale={{emptyText: "No document found"}}
                 scroll={{
                     y: 600,
                 }}

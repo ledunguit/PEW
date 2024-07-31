@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { App, Form, FormInstance, Modal, Space } from "antd";
-import { AssignUserForm, Project } from "@/types";
-import { MdOutlineAddLink } from "react-icons/md";
+import React, {useState} from "react";
+import {App, Form, FormInstance, Modal, Space} from "antd";
+import {AssignUserForm, Project} from "@/types";
+import {MdOutlineAddLink} from "react-icons/md";
 import DebounceSelect from "@/layouts/components/controls/debounce-select";
-import { userManagementService } from "@/services/modules/admin/user-management";
-import { projectService } from "@/services/modules/admin/project";
+import {userManagementService} from "@/services/modules/admin/user-management";
+import {projectService} from "@/services/modules/admin/project";
 
 interface UserValue {
     label: string;
@@ -24,20 +24,20 @@ async function fetchUserList(email: string): Promise<UserValue[]> {
     });
 }
 
-const AssingUserModal = ({
-    form,
-    open,
-    loading,
-    setOpen,
-    assigningProject,
-}: {
+const AssigningUserModal = ({
+                                form,
+                                open,
+                                loading,
+                                setOpen,
+                                assigningProject,
+                            }: {
     form: FormInstance<AssignUserForm>;
     open: boolean;
     loading: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     assigningProject: Project | null;
 }) => {
-    const { message } = App.useApp();
+    const {message} = App.useApp();
     const [users, setUsers] = useState<UserValue[]>([]);
 
     const handleAssignUsers = async () => {
@@ -69,7 +69,7 @@ const AssingUserModal = ({
             loading={loading}
             okText={
                 <Space>
-                    <MdOutlineAddLink />
+                    <MdOutlineAddLink/>
                     Assign
                 </Space>
             }
@@ -93,11 +93,11 @@ const AssingUserModal = ({
                     onChange={(newValue) => {
                         setUsers(newValue as UserValue[]);
                     }}
-                    style={{ width: "100%" }}
+                    style={{width: "100%"}}
                 />
             </Form>
         </Modal>
     );
 };
 
-export default AssingUserModal;
+export default AssigningUserModal;

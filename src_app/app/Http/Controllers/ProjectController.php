@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\Project\CopyPublicKeyRequest;
 use App\Http\Requests\User\Project\UploadDocumentRequest;
+use App\Http\Requests\User\Project\VerifyDocumentRequest;
 use App\Interfaces\UserRepositoryInterface;
 use App\Services\VaultService;
 use Illuminate\Support\Facades\Auth;
@@ -158,6 +160,75 @@ class ProjectController extends BaseController
 
         return $this->success([
             'message' => 'Document deleted'
+        ]);
+    }
+
+    public function verifyDocument(VerifyDocumentRequest $request)
+    {
+        $project = Auth::user()->projects()->where('projects.project_id', $request->project_id)->first();
+
+        if (!$project) {
+            return $this->error([
+                'message' => 'Project not found'
+            ]);
+        }
+
+        $document = $project->documents()->where('id', $request->document_id)->first();
+
+        if (!$document) {
+            return $this->error([
+                'message' => 'Document not found for this project'
+            ]);
+        }
+
+        if ($document->created_by === Auth::user()->id) {
+            return $this->error([
+                'message' => "You can't verify your own document"
+            ]);
+        }
+
+        $user = $document->createdBy;
+
+        if (!$user->vault_setting) {
+            return $this->error([
+                'message' => "Something went wrong, please contact administrator"
+            ]);
+        }
+
+        $publicKey = $this->vaultService->getPublicKey($user->vault_setting->vault_key_pair_path);
+
+        $userPublicKeyResource = openssl_pkey_get_public($publicKey);
+
+        $signature = base64_decode($document->signature);
+
+        $verified = openssl_verify($document->hash, $signature, $userPublicKeyResource, OPENSSL_ALGO_SHA256);
+
+        if ($verified === 1) {
+            return $this->success([
+                'message' => 'Document verified, this document is signed by ' . $document->createdBy->name
+            ]);
+        }
+
+        return $this->error([
+            'message' => 'Document verification failed, this document is not signed by ' . $document->createdBy->name
+        ]);
+    }
+
+    public function copyPublicKey(CopyPublicKeyRequest $request)
+    {
+        $user = $this->userRepository->findOrFail($request->input('user_id'));
+
+        if (!$user->vault_setting) {
+            return $this->error([
+                'message' => "Something went wrong, please contact administrator"
+            ]);
+        }
+
+        $publicKey = $this->vaultService->getPublicKey($user->vault_setting->vault_key_pair_path);
+
+        return $this->success([
+            'message' => 'Public key copied',
+            'publicKey' => $publicKey
         ]);
     }
 }

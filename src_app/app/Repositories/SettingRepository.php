@@ -13,6 +13,11 @@ class SettingRepository extends BaseRepository implements SettingRepositoryInter
         parent::__construct($vaultSetting);
     }
 
+    public function getModel(): VaultSetting
+    {
+        return $this->vaultSetting;
+    }
+
     public function getVaultPath(): string
     {
         return config('vault.kv_path');

@@ -13,6 +13,7 @@ class ProjectController extends BaseController
 {
     public function __construct(protected ProjectRepositoryInterface $projectRepository)
     {
+        parent::__construct();
     }
 
     public function index()
@@ -61,7 +62,15 @@ class ProjectController extends BaseController
             return $this->error([]);
         }
 
-        return $this->projectRepository->assignUsers($projectId, $request->input("user_ids"));
+        $result = $this->projectRepository->assignUsers($projectId, $request->input("user_ids"));
+
+        if (!$result) {
+            return $this->error([
+                "message" => "User already assigned to this project"
+            ]);
+        }
+
+        return $this->success([]);
     }
 
     public function delete($id)

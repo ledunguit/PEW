@@ -2,11 +2,8 @@
 
 namespace App\Interfaces;
 
-use Illuminate\Database\Eloquent\Model;
-
 interface BaseRepositoryInterface
 {
-    public function getModel(): Model;
     public function all();
 
     public function find($id);
