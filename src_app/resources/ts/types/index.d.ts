@@ -7,6 +7,7 @@ export * from "./auth";
 export * from "./pages/setting";
 export * from "./pages/project";
 export * from "./pages/document";
+export * from "./pages/verify-document";
 
 // Admin
 export * from "./pages/admin/project";

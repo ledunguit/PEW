@@ -25,6 +25,14 @@ export const USER_MENU_ITEMS: MenuProps["items"] = [
         },
     },
     {
+        key: "verify-document",
+        icon: <SlDocs />,
+        label: "Verify Document",
+        onClick: () => {
+            window.location.href = ROUTES.USER.DOCUMENTS.VERIFY;
+        },
+    },
+    {
         key: "profile",
         icon: <FiUser />,
         label: "Profile",

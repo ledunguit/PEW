@@ -48,10 +48,14 @@ Route::name('admin.')->middleware(["auth", "role:admin"])->prefix('/admin')->gro
 
     Route::name('document.')->prefix('/documents')->group(function () {
         Route::get('/', [AdminDocumentController::class, 'index'])->name('index');
-        Route::get('/{project_id}',
-            [AdminDocumentController::class, 'showProjectDocuments'])->name('showProjectDocuments');
-        Route::get('/download-document/{project_id}/{document_id}',
-            [AdminDocumentController::class, 'downloadDocument'])->name('downloadDocument');
+        Route::get(
+            '/{project_id}',
+            [AdminDocumentController::class, 'showProjectDocuments']
+        )->name('showProjectDocuments');
+        Route::get(
+            '/download-document/{project_id}/{document_id}',
+            [AdminDocumentController::class, 'downloadDocument']
+        )->name('downloadDocument');
     });
 
     Route::name('profile.')->prefix('/profile')->group(function () {
@@ -66,8 +70,10 @@ Route::name('admin.')->middleware(["auth", "role:admin"])->prefix('/admin')->gro
         Route::get('/', [AdminUserManagementController::class, 'index'])->name('index');
         Route::post('/create', [AdminUserManagementController::class, 'create'])->name('create');
         Route::delete('/delete/{id}', [AdminUserManagementController::class, 'delete'])->name('delete');
-        Route::post('/update-status/{id}',
-            [AdminUserManagementController::class, 'updateStatus'])->name('updateStatus');
+        Route::post(
+            '/update-status/{id}',
+            [AdminUserManagementController::class, 'updateStatus']
+        )->name('updateStatus');
 
         Route::post(
             '/get-users-like-by-name',
@@ -90,10 +96,14 @@ Route::group(["middleware" => ["auth", "role:user", "userStatus"]], function () 
         Route::get('/', [ProjectController::class, 'index'])->name('index');
         Route::get('/detail/{project_id}', [ProjectController::class, 'detail'])->name('detail');
         Route::post('/upload-document', [ProjectController::class, 'uploadDocument'])->name('uploadDocument');
-        Route::get('/download-document/{project_id}/{document_id}',
-            [ProjectController::class, 'downloadDocument'])->name('downloadDocument');
-        Route::delete('/delete-document/{project_id}/{document_id}',
-            [ProjectController::class, 'deleteDocument'])->name('deleteDocument');
+        Route::get(
+            '/download-document/{project_id}/{document_id}',
+            [ProjectController::class, 'downloadDocument']
+        )->name('downloadDocument');
+        Route::delete(
+            '/delete-document/{project_id}/{document_id}',
+            [ProjectController::class, 'deleteDocument']
+        )->name('deleteDocument');
 
         Route::post('/verify-document', [ProjectController::class, 'verifyDocument'])->name('verifyDocument');
         Route::post('/copy-public-key', [ProjectController::class, 'copyPublicKey'])->name('copyPublicKey');
@@ -101,6 +111,9 @@ Route::group(["middleware" => ["auth", "role:user", "userStatus"]], function () 
 
     Route::name("document.")->prefix('/documents')->group(function () {
         Route::post("/upload", [DocumentController::class, "upload"])->name("upload");
+        Route::get('/verify-document', [DocumentController::class, 'verifyDocumentView'])->name('verifyDocumentView');
+
+        Route::post('/verify-document', [DocumentController::class, 'verifyDocument'])->name('verifyDocument');
     });
 
     Route::name("profile.")->prefix("/profile")->group(function () {

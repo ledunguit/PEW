@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 const axiosInstance = axios.create({
     timeout: 1000 * 30,
@@ -24,8 +24,12 @@ const axiosService = {
     get<T>(url: string): Promise<T> {
         return axiosInstance.get(url);
     },
-    post<T>(url: string, data?: object): Promise<T> {
-        return axiosInstance.post(url, data);
+    post<T>(
+        url: string,
+        data?: object,
+        config?: AxiosRequestConfig<object>
+    ): Promise<T> {
+        return axiosInstance.post(url, data, config);
     },
     put<T>(url: string, data?: object): Promise<T> {
         return axiosInstance.put(url, data);

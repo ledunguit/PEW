@@ -6,7 +6,10 @@ export const ROUTES = {
     INFO: "/info",
     USER: {
         DASHBOARD: "/dashboard",
-        DOCUMENTS: "/documents",
+        DOCUMENTS: {
+            INDEX: "/documents",
+            VERIFY: "/documents/verify-document",
+        },
         PROJECTS: {
             INDEX: "/projects",
             DETAIL: (projectId: string) => `/projects/detail/${projectId}`,
@@ -42,7 +45,8 @@ export const ROUTES = {
             UPDATE: "/admin/documents/update",
             DOWNLOAD_DOCUMENT: (projectId: string, documentId: number) =>
                 `/admin/documents/download-document/${projectId}/${documentId}`,
-            SHOW_DOCUMENTS: (projectId: string) => `/admin/documents/${projectId}`,
+            SHOW_DOCUMENTS: (projectId: string) =>
+                `/admin/documents/${projectId}`,
         },
         USERS: {
             INDEX: "/admin/users",
