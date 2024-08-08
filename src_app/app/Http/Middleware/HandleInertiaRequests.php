@@ -39,11 +39,9 @@ class HandleInertiaRequests extends Middleware
     {
         $user = Auth::user();
 
-        if ($user) {
-            $user->load('vault_setting');
-        }
+        $user?->load('vault_setting');
 
-        $userInfo = $user ? $user->only('id', 'name', 'email', 'role', 'status', 'vault_setting') : null;
+        $userInfo = $user?->only('id', 'name', 'email', 'role', 'status', 'vault_setting', 'created_at');
 
         return array_merge(parent::share($request), [
             'route' => Route::current()->uri ?? Route::getCurrentRoute()->getPrefix(),

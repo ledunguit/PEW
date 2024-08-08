@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -35,7 +36,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'role',
-        'created_at',
         'email_verified_at',
         'updated_at'
     ];
@@ -67,5 +67,10 @@ class User extends Authenticatable
     public function vault_setting(): HasOne
     {
         return $this->hasOne(VaultSetting::class);
+    }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(Document::class, 'created_by');
     }
 }
