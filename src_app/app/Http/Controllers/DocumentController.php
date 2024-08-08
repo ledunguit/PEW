@@ -51,12 +51,12 @@ class DocumentController extends BaseController
 
         if ($verified === 1) {
             return $this->success([
-                'message' => 'Document verified successfully'
+                'message' => 'Document verified successfully, signature is valid'
             ]);
         }
 
         return $this->error([
-            'message' => 'Document verification failed'
+            'message' => 'Document verification failed, the signature is invalid'
         ]);
     }
 }

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Typography, Flex, Space, Button } from "antd";
+import React, {useState} from "react";
+import {Typography, Flex, Space, Button} from "antd";
 import LandingLayout from "@/layouts/landing";
-import { router } from "@inertiajs/react";
-import { IoRocketOutline } from "react-icons/io5";
-import { MdOutlineRocket, MdOutlineRocketLaunch } from "react-icons/md";
+import {router} from "@inertiajs/react";
+import {IoRocketOutline} from "react-icons/io5";
+import {MdOutlineRocket, MdOutlineRocketLaunch} from "react-icons/md";
 
-const { Title, Text } = Typography;
+const {Title, Text} = Typography;
 
 const HomePage = () => {
     const [hover, setHover] = useState(false);
@@ -13,10 +13,11 @@ const HomePage = () => {
     return (
         <Flex>
             <Space direction="vertical" align="center">
-                <Title level={4}>LEDUNGOQS - Internal File Sharing</Title>
-                <Text>Version: 0.0.1</Text>
+                <Title level={4}>LEDUNGOQS - Internal File Sharing - Cryptography Capstone Project</Title>
+                <Text>Lecturer: PhD Nguyễn Ngọc Tự</Text>
+                <Text>Student: Lê Đăng Dũng</Text>
                 <Text>Copyright: 2024</Text>
-                <Text>Author: Le Dang Dung</Text>
+                <Text>Version: 0.0.1</Text>
                 <Button
                     onMouseEnter={() => setHover(true)}
                     onMouseLeave={() => setHover(false)}
@@ -25,7 +26,7 @@ const HomePage = () => {
                         icon: "text-xl",
                     }}
                     icon={
-                        hover ? <MdOutlineRocketLaunch /> : <MdOutlineRocket />
+                        hover ? <MdOutlineRocketLaunch/> : <MdOutlineRocket/>
                     }
                 >
                     Enter application

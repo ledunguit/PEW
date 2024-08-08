@@ -17,10 +17,10 @@ const ProjectIndexPage = () => {
             </Divider>
 
             <Space direction="vertical">
-                <Text>Version: 0.0.1</Text>
-                <Text>Copyright: 2024</Text>
-                <Text>Lecturer: PhD Nguyễn Ngọc Tự</Text>
-                <Text>Student: Lê Đăng Dũng</Text>
+                <Text>- Version: 0.0.1</Text>
+                <Text>- Copyright: 2024</Text>
+                <Text>- Lecturer: PhD Nguyễn Ngọc Tự</Text>
+                <Text>- Student: Lê Đăng Dũng</Text>
             </Space>
         </Flex>
     );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
     App,
     Button,
@@ -15,22 +15,22 @@ import {
     UploadProps,
     Watermark,
 } from "antd";
-import { FiInfo, FiRefreshCcw } from "react-icons/fi";
-import { UploadOutlined } from "@ant-design/icons";
-import { TbChecks, TbPencilCheck } from "react-icons/tb";
-import { GrStatusWarning } from "react-icons/gr";
-import { VerifyDocumentPageData } from "@/types";
+import {FiInfo, FiRefreshCcw} from "react-icons/fi";
+import {UploadOutlined} from "@ant-design/icons";
+import {TbChecks, TbPencilCheck} from "react-icons/tb";
+import {VerifyDocumentPageData} from "@/types";
 import verifyDocumentService from "@/services/modules/verify-document";
+import {MdGppBad} from "react-icons/md";
 
-const { Text } = Typography;
+const {Text} = Typography;
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-const VerifyDocumentPage = ({ data }: { data: VerifyDocumentPageData }) => {
+const VerifyDocumentPage = ({data}: { data: VerifyDocumentPageData }) => {
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [verifying, setVerifying] = useState(false);
     const [verified, setVerified] = useState(false);
 
-    const { message } = App.useApp();
+    const {message} = App.useApp();
     const [form] = Form.useForm();
 
     const handleUpload = async () => {
@@ -62,8 +62,11 @@ const VerifyDocumentPage = ({ data }: { data: VerifyDocumentPageData }) => {
             form.resetFields();
             setFileList([]);
         } catch (error: any) {
+            setVerified(false);
             if (error?.data?.message) {
                 message.error(error.data.message);
+            } else if (error?.message) {
+                message.error(error.message);
             } else {
                 message.error("Something went wrong, please try again");
             }
@@ -108,7 +111,7 @@ const VerifyDocumentPage = ({ data }: { data: VerifyDocumentPageData }) => {
 
             <Flex vertical gap={5}>
                 <Space>
-                    <FiInfo />
+                    <FiInfo/>
                     <Text>
                         To verify document, please upload document and signature
                         that has been signed by the signer.
@@ -138,7 +141,7 @@ const VerifyDocumentPage = ({ data }: { data: VerifyDocumentPageData }) => {
                         ]}
                     >
                         <Upload {...uploadDocumentProps}>
-                            <Button icon={<UploadOutlined />}>
+                            <Button icon={<UploadOutlined/>}>
                                 Click to Upload
                             </Button>
                         </Upload>
@@ -191,45 +194,52 @@ const VerifyDocumentPage = ({ data }: { data: VerifyDocumentPageData }) => {
                     </Form.Item>
 
                     <Flex vertical gap={10}>
-                        <Watermark
-                            content={[
-                                "Copyright © 2024 Lê Đăng Dũng",
-                                "Inspired by and supported by Ph.D Nguyễn Ngọc Tự",
-                                "Cryptography project",
-                            ]}
-                        >
-                            <Text>Status:</Text>
-                            <Space className="min-h-[200px]">
-                                {verified ? (
-                                    <Text type="success">
+                        {
+                            !verifying && <Watermark
+                                content={[
+                                    "Copyright © 2024 Lê Đăng Dũng",
+                                    "Inspired by and supported by Ph.D Nguyễn Ngọc Tự",
+                                    "Cryptography project",
+                                ]}
+                            >
+                                <Space className="min-h-[200px]">
+                                    {verified ? (
                                         <Space>
-                                            <TbChecks />
-                                            Verified
+                                            <Text>Status:</Text>
+                                            <Text type="success">
+                                                <Space>
+                                                    <TbChecks/>
+                                                    Verified
+                                                </Space>
+                                            </Text>
                                         </Space>
-                                    </Text>
-                                ) : (
-                                    <Text type="danger">
+                                    ) : (
                                         <Space>
-                                            <GrStatusWarning />
-                                            Not verified
+                                            <Text>Status:</Text>
+                                            <Text type="danger">
+                                                <Space>
+                                                    <MdGppBad/>
+                                                    Not Verified
+                                                </Space>
+                                            </Text>
                                         </Space>
-                                    </Text>
-                                )}
-                            </Space>
-                        </Watermark>
+                                    )}
+                                </Space>
+                            </Watermark>
+                        }
 
                         <Space>
                             <Button
                                 type="primary"
                                 htmlType="submit"
                                 loading={verifying}
-                                icon={<TbPencilCheck />}
+                                icon={<TbPencilCheck/>}
                             >
                                 Verify now
                             </Button>
                             <Button
                                 danger
-                                icon={<FiRefreshCcw />}
+                                icon={<FiRefreshCcw/>}
                                 onClick={() => {
                                     form.resetFields();
                                     setFileList([]);
